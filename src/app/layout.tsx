@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { BackToTop } from "@/components/BackToTop";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 
 export const metadata: Metadata = {
   title: "Key Generator - Generate Secure Keys & Secrets Online",
@@ -49,6 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         {children}
         <BackToTop />
       </body>
