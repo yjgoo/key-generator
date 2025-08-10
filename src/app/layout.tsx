@@ -8,6 +8,21 @@ export const metadata: Metadata = {
   keywords: "key generator, API key, JWT secret, UUID generator, password generator, secure keys, cryptographic keys",
   authors: [{ name: "Key Generator Team" }],
   metadataBase: new URL('https://key-generator.com'),
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.ico', sizes: '48x48' }
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
+    ],
+    other: [
+      { url: '/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/android-chrome-512x512.png', sizes: '512x512', type: 'image/png' }
+    ]
+  },
+  manifest: '/site.webmanifest',
   openGraph: {
     title: "Key Generator - Generate Secure Keys & Secrets Online",
     description: "Generate cryptographically secure keys, API keys, passwords, UUIDs, JWT secrets, and more. Fast, secure, and free.",

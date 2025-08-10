@@ -8,9 +8,11 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">🔑</span>
-              </div>
+              <img 
+                src="/logo.png" 
+                alt="Key Generator Logo" 
+                className="w-8 h-8 rounded-lg"
+              />
               <span className="text-xl font-bold">Key Generator</span>
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
