@@ -51,7 +51,6 @@ export default function RandomStringPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate random strings with letters and numbers for various purposes including tokens, identifiers, codes, and testing data. Customize the length to fit your specific requirements."
       pageUrl="https://key-generator.com/random-string-generator"
     />

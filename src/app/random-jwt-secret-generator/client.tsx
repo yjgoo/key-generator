@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { StructuredData } from '@/components/StructuredData';
@@ -15,16 +16,16 @@ export function JWTSecretGeneratorClient({ generator }: JWTSecretGeneratorClient
   const [copied, setCopied] = useState(false);
   const [options, setOptions] = useState(generator.defaultOptions || {});
 
-  // Generate initial key on mount
-  useEffect(() => {
-    generateKey();
-  }, []);
-
-  const generateKey = () => {
+  const generateKey = useCallback(() => {
     const newKey = generateKeyUtil(generator.id, options);
     setGeneratedKey(newKey);
     setCopied(false);
-  };
+  }, [generator.id, options]);
+
+  // Generate initial key on mount
+  useEffect(() => {
+    generateKey();
+  }, [generateKey]);
 
   const copyToClipboard = async () => {
     try {
@@ -36,9 +37,14 @@ export function JWTSecretGeneratorClient({ generator }: JWTSecretGeneratorClient
     }
   };
 
-  const handleOptionChange = (key: string, value: any) => {
+  const handleOptionChange = (key: string, value: number | string) => {
     const newOptions = { ...options, [key]: value };
     setOptions(newOptions);
+  };
+
+  const getLength = () => {
+    const length = options.length || generator.defaultOptions?.length || 64;
+    return typeof length === 'number' ? length : 64;
   };
 
   return (
@@ -51,7 +57,7 @@ export function JWTSecretGeneratorClient({ generator }: JWTSecretGeneratorClient
         <nav className="mb-8">
           <ol className="flex items-center space-x-2 text-sm text-gray-500">
             <li>
-              <a href="/" className="hover:text-gray-700">Home</a>
+              <Link href="/" className="hover:text-gray-700">Home</Link>
             </li>
             <li>
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -84,7 +90,7 @@ export function JWTSecretGeneratorClient({ generator }: JWTSecretGeneratorClient
                   <label htmlFor="length" className="block text-sm font-medium text-gray-700">
                     Key Length
                     <span className="ml-2 text-gray-500 text-xs">
-                      ({options.length || generator.defaultOptions?.length} characters = {((options.length || generator.defaultOptions?.length) * 4)} bits)
+                      ({getLength()} characters = {getLength() * 4} bits)
                     </span>
                   </label>
                   <div className="space-y-2">
@@ -94,11 +100,11 @@ export function JWTSecretGeneratorClient({ generator }: JWTSecretGeneratorClient
                       min="8"
                       max="512"
                       step="8"
-                      value={options.length || generator.defaultOptions?.length}
+                      value={getLength()}
                       onChange={(e) => handleOptionChange('length', parseInt(e.target.value))}
                       className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                       style={{
-                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((options.length || generator.defaultOptions?.length) - 8) / (512 - 8) * 100}%, #e5e7eb ${((options.length || generator.defaultOptions?.length) - 8) / (512 - 8) * 100}%, #e5e7eb 100%)`
+                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(getLength() - 8) / (512 - 8) * 100}%, #e5e7eb ${(getLength() - 8) / (512 - 8) * 100}%, #e5e7eb 100%)`
                       }}
                     />
                     <div className="flex justify-between text-xs text-gray-500">
@@ -118,7 +124,7 @@ export function JWTSecretGeneratorClient({ generator }: JWTSecretGeneratorClient
                         key={length}
                         onClick={() => handleOptionChange('length', length)}
                         className={`px-3 py-1 text-xs rounded-full border transition-colors ${
-                          (options.length || generator.defaultOptions?.length) === length
+                          getLength() === length
                             ? 'bg-blue-100 border-blue-300 text-blue-800'
                             : 'bg-gray-100 border-gray-300 text-gray-600 hover:bg-gray-200'
                         }`}
@@ -199,7 +205,7 @@ export function JWTSecretGeneratorClient({ generator }: JWTSecretGeneratorClient
             </h3>
             <p className="text-gray-600 mb-6">
               A JWT secret key is a private cryptographic key used to sign JSON Web Tokens. This signature is crucial as it verifies 
-              that the sender of the JWT is who it claims to be and ensures the message wasn't changed along the way. The secret key 
+              that the sender of the JWT is who it claims to be and ensures the message wasn&apos;t changed along the way. The secret key 
               should be kept secure and known only to the application that issues the token and the application that verifies it.
             </p>
 
@@ -341,9 +347,9 @@ export function JWTSecretGeneratorClient({ generator }: JWTSecretGeneratorClient
                 Security Note
               </h4>
               <p className="text-gray-600 text-sm">
-                By using our JWT Secret Key Generator, you're taking an important step toward implementing secure authentication 
-                in your applications. The tool provides cryptographically strong keys that help protect your users' data and 
-                your system's integrity.
+                By using our JWT Secret Key Generator, you&apos;re taking an important step toward implementing secure authentication 
+                in your applications. The tool provides cryptographically strong keys that help protect your users&apos; data and 
+                your system&apos;s integrity.
               </p>
             </div>
           </div>
@@ -372,7 +378,7 @@ export function JWTSecretGeneratorClient({ generator }: JWTSecretGeneratorClient
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Security Features</h3>
                 <ul className="list-disc pl-6 space-y-2 text-gray-600">
-                  <li>Uses browser's built-in cryptographic functions</li>
+                  <li>Uses browser&apos;s built-in cryptographic functions</li>
                   <li>High entropy random number generation</li>
                   <li>No server-side processing</li>
                   <li>Keys generated locally in your browser</li>

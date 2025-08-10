@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { keyGenerators, KeyGenerator, generateKey } from '@/lib/keyGenerators';
 
@@ -33,16 +33,16 @@ function GeneratorCard({ generator }: GeneratorCardProps) {
   const [copied, setCopied] = useState(false);
   const [options, setOptions] = useState(generator.defaultOptions || {});
 
-  const generateValue = () => {
+  const generateValue = useCallback(() => {
     const value = generateKey(generator.id, options);
     setGeneratedValue(value);
     setCopied(false);
-  };
+  }, [generator.id, options]);
 
   // Auto-generate value on component mount
   useEffect(() => {
     generateValue();
-  }, []);
+  }, [generateValue]);
 
   const copyToClipboard = async () => {
     try {
@@ -57,6 +57,11 @@ function GeneratorCard({ generator }: GeneratorCardProps) {
   const handleOptionChange = (key: string, value: string) => {
     const newOptions = { ...options, [key]: parseInt(value) || value };
     setOptions(newOptions);
+  };
+
+  const getOptionValue = (key: string, defaultValue: number | string | boolean): number => {
+    const value = options[key] || defaultValue;
+    return typeof value === 'number' ? value : Number(value) || 0;
   };
 
   return (
@@ -83,18 +88,18 @@ function GeneratorCard({ generator }: GeneratorCardProps) {
                         min="8"
                         max="512"
                         step="8"
-                        value={options[key] || defaultValue}
+                        value={getOptionValue(key, defaultValue)}
                         onChange={(e) => handleOptionChange(key, e.target.value)}
                         className="w-20 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                       />
                       <span className="text-xs text-gray-500">
-                        {options[key] || defaultValue} chars ({((options[key] || defaultValue) * 4)} bits)
+                        {getOptionValue(key, defaultValue)} chars ({getOptionValue(key, defaultValue) * 4} bits)
                       </span>
                     </div>
                   ) : (
                     <input
                       type="number"
-                      value={options[key] || defaultValue}
+                      value={getOptionValue(key, defaultValue)}
                       onChange={(e) => handleOptionChange(key, e.target.value)}
                       className="w-12 px-2 py-1 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       min="1"

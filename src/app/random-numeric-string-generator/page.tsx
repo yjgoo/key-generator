@@ -51,7 +51,6 @@ export default function RandomNumericStringPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate random numeric strings containing only digits (0-9). Perfect for creating PIN codes, numeric IDs, verification codes, and any application requiring number-only strings."
       pageUrl="https://key-generator.com/random-numeric-string-generator"
     />

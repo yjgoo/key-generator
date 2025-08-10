@@ -51,7 +51,6 @@ export default function NextJSAuthSecretPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate secure authentication secrets specifically designed for Next.js applications. These cryptographically secure keys are perfect for JWT signing, session management, and other authentication purposes in your Next.js projects."
       pageUrl="https://key-generator.com/next-js-auth-secret-generator"
     />

@@ -39,14 +39,14 @@ export default function PrivacyPolicyPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Introduction</h2>
               <p className="text-gray-700 mb-4">
-                Welcome to Key Generator ("we," "our," or "us"). We are committed to protecting your privacy and ensuring transparency about how we handle your information. This Privacy Policy explains how we collect, use, and protect your information when you use our key generation services at key-generator.com.
+                Welcome to Key Generator (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to protecting your privacy and ensuring transparency about how we handle your information. This Privacy Policy explains how we collect, use, and protect your information when you use our key generation services at key-generator.com.
               </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. Information We Collect</h2>
               
-              <h3 className="text-xl font-medium text-gray-800 mb-3">2.1 Information We Don't Collect</h3>
+              <h3 className="text-xl font-medium text-gray-800 mb-3">2.1 Information We Don&apos;t Collect</h3>
               <p className="text-gray-700 mb-4">
                 <strong>Generated Keys and Secrets:</strong> We do not store, log, or have access to any keys, passwords, secrets, or other cryptographic material you generate using our service. All key generation happens locally in your browser.
               </p>
@@ -76,7 +76,7 @@ export default function PrivacyPolicyPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Data Security</h2>
               <p className="text-gray-700 mb-4">
-                We implement appropriate security measures to protect against unauthorized access, alteration, disclosure, or destruction of information. However, since we don't store your generated keys or secrets, the most sensitive data never leaves your browser.
+                We implement appropriate security measures to protect against unauthorized access, alteration, disclosure, or destruction of information. However, since we don&apos;t store your generated keys or secrets, the most sensitive data never leaves your browser.
               </p>
             </section>
 
@@ -108,12 +108,12 @@ export default function PrivacyPolicyPage() {
                 <li>Right to object to processing</li>
               </ul>
               <p className="text-gray-700 mb-4">
-                Since we don't store your generated keys or personal information, most of these rights are automatically protected by our privacy-by-design approach.
+                Since we don&apos;t store your generated keys or personal information, most of these rights are automatically protected by our privacy-by-design approach.
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Children's Privacy</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Children&apos;s Privacy</h2>
               <p className="text-gray-700 mb-4">
                 Our service is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13.
               </p>
@@ -122,7 +122,7 @@ export default function PrivacyPolicyPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Changes to This Privacy Policy</h2>
               <p className="text-gray-700 mb-4">
-                We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
+                We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last updated&quot; date.
               </p>
             </section>
 

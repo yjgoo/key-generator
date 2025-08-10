@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { getPrimaryGenerator, generateKey, keyGenerators, getGeneratorPath } from '@/lib/keyGenerators';
 
@@ -9,11 +9,11 @@ export function Hero() {
   const [copied, setCopied] = useState(false);
   const primaryGenerator = getPrimaryGenerator();
 
-  const generateNewKey = () => {
+  const generateNewKey = useCallback(() => {
     const newKey = generateKey(primaryGenerator.id);
     setGeneratedKey(newKey);
     setCopied(false);
-  };
+  }, [primaryGenerator.id]);
 
   const copyToClipboard = async () => {
     try {
@@ -28,7 +28,7 @@ export function Hero() {
   // Generate initial key on component mount
   useEffect(() => {
     generateNewKey();
-  }, []);
+  }, [generateNewKey]);
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">

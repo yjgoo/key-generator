@@ -51,7 +51,6 @@ export default function RandomBase64StringPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate random Base64 encoded strings for data encoding, tokens, and secure data transmission. Perfect for creating encoded identifiers, session tokens, and API keys that need Base64 encoding."
       pageUrl="https://key-generator.com/random-base64-string-generator"
     />

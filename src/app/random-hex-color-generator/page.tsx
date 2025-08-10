@@ -51,7 +51,6 @@ export default function RandomHexColorPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate random hexadecimal color codes for web design, CSS styling, and creative projects. Get instant hex color values in the standard #RRGGBB format for use in websites and applications."
       pageUrl="https://key-generator.com/random-hex-color-generator"
     />

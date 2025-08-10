@@ -51,7 +51,6 @@ export default function RandomPasswordPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate strong random passwords with mixed characters including uppercase, lowercase, numbers, and special symbols. Create secure passwords for accounts, applications, and services with customizable length."
       pageUrl="https://key-generator.com/random-password-generator"
     />

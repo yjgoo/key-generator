@@ -51,7 +51,6 @@ export default function RandomAPIKeyPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate random API keys for your applications and services. These secure keys are perfect for REST APIs, webhooks, and service authentication with the standard 'sk-' prefix format."
       pageUrl="https://key-generator.com/random-api-key-generator"
     />

@@ -124,7 +124,7 @@ export function Header() {
                   onMouseLeave={handleMouseLeave}
                 >
                   <div className="max-h-96 overflow-y-auto">
-                    {keyGenerators.map((generator, index) => (
+                    {keyGenerators.map((generator) => (
                       <button
                         key={generator.id}
                         onClick={() => handleGeneratorClick(generator.id)}

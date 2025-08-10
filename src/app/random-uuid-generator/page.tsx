@@ -51,7 +51,6 @@ export default function RandomUUIDPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate RFC 4122 compliant universally unique identifiers (UUIDs). Perfect for database primary keys, session IDs, and any application requiring globally unique identifiers."
       pageUrl="https://key-generator.com/random-uuid-generator"
     />

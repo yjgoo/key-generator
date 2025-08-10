@@ -2,7 +2,7 @@ export interface KeyGenerator {
   id: string;
   title: string;
   description: string;
-  defaultOptions?: any;
+  defaultOptions?: Record<string, number | string | boolean>;
 }
 
 // Browser-compatible utility functions for key generation
@@ -128,13 +128,18 @@ export const keyGenerators: KeyGenerator[] = [
 ];
 
 // Client-side key generation function
-export const generateKey = (id: string, options?: any): string => {
+export const generateKey = (id: string, options?: Record<string, number | string | boolean>): string => {
+  const getNumberOption = (key: string, defaultValue: number): number => {
+    const value = options?.[key];
+    return typeof value === 'number' ? value : defaultValue;
+  };
+
   switch (id) {
     case 'nextjs-auth':
       return generateBase64Random(32);
 
     case 'secure-key':
-      return generateSecureRandom(options?.length || 32);
+      return generateSecureRandom(getNumberOption('length', 32));
 
     case 'api-key':
       const prefix = 'sk-';
@@ -143,11 +148,11 @@ export const generateKey = (id: string, options?: any): string => {
 
     case 'password':
       const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
-      return generateRandomString(options?.length || 16, charset);
+      return generateRandomString(getNumberOption('length', 16), charset);
 
     case 'random-string':
       const stringCharset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      return generateRandomString(options?.length || 20, stringCharset);
+      return generateRandomString(getNumberOption('length', 20), stringCharset);
 
     case 'uuid':
       return generateUUID();
@@ -156,15 +161,15 @@ export const generateKey = (id: string, options?: any): string => {
       return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
 
     case 'base64':
-      return generateBase64Random(options?.length || 24);
+      return generateBase64Random(getNumberOption('length', 24));
 
     case 'alphanumeric':
       const alphanumericCharset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      return generateRandomString(options?.length || 16, alphanumericCharset);
+      return generateRandomString(getNumberOption('length', 16), alphanumericCharset);
 
     case 'numeric':
       const numericCharset = '0123456789';
-      return generateRandomString(options?.length || 12, numericCharset);
+      return generateRandomString(getNumberOption('length', 12), numericCharset);
 
     case 'mac-address':
       const hexChars = '0123456789ABCDEF';
@@ -179,8 +184,9 @@ export const generateKey = (id: string, options?: any): string => {
       // Generate cryptographically secure JWT secret using hex encoding
       // Similar to require('crypto').randomBytes(32).toString('hex')
       // Length in characters (hex chars), so bytes = length / 2
-      const bytesNeeded = Math.ceil((options?.length || 64) / 2);
-      return generateSecureRandom(bytesNeeded).substring(0, options?.length || 64);
+      const length = getNumberOption('length', 64);
+      const bytesNeeded = Math.ceil(length / 2);
+      return generateSecureRandom(bytesNeeded).substring(0, length);
 
     default:
       return 'Invalid generator ID';

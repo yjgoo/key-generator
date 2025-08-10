@@ -51,7 +51,6 @@ export default function RandomMACAddressPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate random MAC addresses in standard format (XX:XX:XX:XX:XX:XX) for network testing, simulation, and development purposes. Create valid media access control addresses for your projects."
       pageUrl="https://key-generator.com/random-mac-address-generator"
     />

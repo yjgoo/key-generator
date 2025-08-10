@@ -39,7 +39,7 @@ export default function TermsOfServicePage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Acceptance of Terms</h2>
               <p className="text-gray-700 mb-4">
-                By accessing or using Key Generator ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you disagree with any part of these terms, then you may not access the Service.
+                By accessing or using Key Generator (&quot;Service&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you disagree with any part of these terms, then you may not access the Service.
               </p>
             </section>
 
@@ -77,7 +77,7 @@ export default function TermsOfServicePage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Service Availability</h2>
               <p className="text-gray-700 mb-4">
-                We strive to maintain the Service's availability but cannot guarantee uninterrupted access. The Service may be temporarily unavailable due to maintenance, updates, or circumstances beyond our control. We reserve the right to modify, suspend, or discontinue the Service at any time without notice.
+                We strive to maintain the Service&apos;s availability but cannot guarantee uninterrupted access. The Service may be temporarily unavailable due to maintenance, updates, or circumstances beyond our control. We reserve the right to modify, suspend, or discontinue the Service at any time without notice.
               </p>
             </section>
 
@@ -114,7 +114,7 @@ export default function TermsOfServicePage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Disclaimers</h2>
               <p className="text-gray-700 mb-4">
-                THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS. WE EXPRESSLY DISCLAIM ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+                THE SERVICE IS PROVIDED ON AN &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; BASIS. WE EXPRESSLY DISCLAIM ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
               </p>
               <p className="text-gray-700 mb-4">
                 WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, TIMELY, SECURE, OR ERROR-FREE, OR THAT THE RESULTS OBTAINED FROM THE USE OF THE SERVICE WILL BE ACCURATE OR RELIABLE.
@@ -131,7 +131,7 @@ export default function TermsOfServicePage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">10. Indemnification</h2>
               <p className="text-gray-700 mb-4">
-                You agree to defend, indemnify, and hold harmless Key Generator and its licensee and licensors, and their employees, contractors, agents, officers and directors, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney's fees).
+                You agree to defend, indemnify, and hold harmless Key Generator and its licensee and licensors, and their employees, contractors, agents, officers and directors, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney&apos;s fees).
               </p>
             </section>
 
@@ -152,7 +152,7 @@ export default function TermsOfServicePage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">13. Changes to Terms</h2>
               <p className="text-gray-700 mb-4">
-                We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days' notice prior to any new terms taking effect.
+                We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days&apos; notice prior to any new terms taking effect.
               </p>
             </section>
 

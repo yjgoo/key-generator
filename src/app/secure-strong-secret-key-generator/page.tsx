@@ -51,7 +51,6 @@ export default function SecureStrongSecretKeyPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate cryptographically secure and strong secret keys with customizable length. Perfect for encryption, API authentication, and other security-critical applications that require high-entropy random keys."
       pageUrl="https://key-generator.com/secure-strong-secret-key-generator"
     />

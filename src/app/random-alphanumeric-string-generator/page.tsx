@@ -51,7 +51,6 @@ export default function RandomAlphanumericStringPage() {
   return (
     <GeneratorPage
       generator={generator}
-      seoTitle={pageTitle}
       seoDescription="Generate random alphanumeric strings containing only letters and numbers. Perfect for creating clean codes, user-friendly identifiers, and tokens without special characters."
       pageUrl="https://key-generator.com/random-alphanumeric-string-generator"
     />

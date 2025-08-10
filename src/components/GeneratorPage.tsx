@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { StructuredData } from '@/components/StructuredData';
@@ -8,26 +9,25 @@ import { KeyGenerator, generateKey as generateKeyUtil } from '@/lib/keyGenerator
 
 interface GeneratorPageProps {
   generator: KeyGenerator;
-  seoTitle: string;
   seoDescription: string;
   pageUrl?: string;
 }
 
-export function GeneratorPage({ generator, seoTitle, seoDescription, pageUrl }: GeneratorPageProps) {
+export function GeneratorPage({ generator, seoDescription, pageUrl }: GeneratorPageProps) {
   const [generatedKey, setGeneratedKey] = useState<string>('');
   const [copied, setCopied] = useState(false);
   const [options, setOptions] = useState(generator.defaultOptions || {});
 
-  // Generate initial key on mount
-  useEffect(() => {
-    generateKey();
-  }, []);
-
-  const generateKey = () => {
+  const generateKey = useCallback(() => {
     const newKey = generateKeyUtil(generator.id, options);
     setGeneratedKey(newKey);
     setCopied(false);
-  };
+  }, [generator.id, options]);
+
+  // Generate initial key on mount
+  useEffect(() => {
+    generateKey();
+  }, [generateKey]);
 
   const copyToClipboard = async () => {
     try {
@@ -39,9 +39,14 @@ export function GeneratorPage({ generator, seoTitle, seoDescription, pageUrl }: 
     }
   };
 
-  const handleOptionChange = (key: string, value: any) => {
+  const handleOptionChange = (key: string, value: number | string) => {
     const newOptions = { ...options, [key]: value };
     setOptions(newOptions);
+  };
+
+  const getOptionValue = (key: string, defaultValue: number | string | boolean): number => {
+    const value = options[key] || defaultValue;
+    return typeof value === 'number' ? value : Number(value) || 0;
   };
 
   return (
@@ -54,7 +59,7 @@ export function GeneratorPage({ generator, seoTitle, seoDescription, pageUrl }: 
         <nav className="mb-8">
           <ol className="flex items-center space-x-2 text-sm text-gray-500">
             <li>
-              <a href="/" className="hover:text-gray-700">Home</a>
+              <Link href="/" className="hover:text-gray-700">Home</Link>
             </li>
             <li>
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -89,7 +94,7 @@ export function GeneratorPage({ generator, seoTitle, seoDescription, pageUrl }: 
                         {key.replace(/([A-Z])/g, ' $1').trim()}
                         {generator.id === 'jwt-secret' && key === 'length' && (
                           <span className="ml-2 text-gray-500 text-xs">
-                            ({options[key] || defaultValue} characters = {((options[key] || defaultValue) * 4)} bits)
+                            ({getOptionValue(key, defaultValue)} characters = {getOptionValue(key, defaultValue) * 4} bits)
                           </span>
                         )}
                       </label>
@@ -101,11 +106,11 @@ export function GeneratorPage({ generator, seoTitle, seoDescription, pageUrl }: 
                             min="8"
                             max="512"
                             step="8"
-                            value={options[key] || defaultValue}
+                            value={getOptionValue(key, defaultValue)}
                             onChange={(e) => handleOptionChange(key, parseInt(e.target.value))}
                             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                             style={{
-                              background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((options[key] || defaultValue) - 8) / (512 - 8) * 100}%, #e5e7eb ${((options[key] || defaultValue) - 8) / (512 - 8) * 100}%, #e5e7eb 100%)`
+                              background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(getOptionValue(key, defaultValue) - 8) / (512 - 8) * 100}%, #e5e7eb ${(getOptionValue(key, defaultValue) - 8) / (512 - 8) * 100}%, #e5e7eb 100%)`
                             }}
                           />
                           <div className="flex justify-between text-xs text-gray-500">
@@ -117,7 +122,7 @@ export function GeneratorPage({ generator, seoTitle, seoDescription, pageUrl }: 
                         <input
                           type="number"
                           id={key}
-                          value={options[key] || defaultValue}
+                          value={getOptionValue(key, defaultValue)}
                           onChange={(e) => handleOptionChange(key, parseInt(e.target.value))}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           min="1"
@@ -208,7 +213,7 @@ export function GeneratorPage({ generator, seoTitle, seoDescription, pageUrl }: 
               Security Features
             </h3>
             <ul className="list-disc pl-6 space-y-2 text-gray-600">
-              <li>Uses browser's built-in cryptographic functions</li>
+              <li>Uses browser&apos;s built-in cryptographic functions</li>
               <li>High entropy random number generation</li>
               <li>No server-side processing</li>
               <li>Keys generated locally in your browser</li>
