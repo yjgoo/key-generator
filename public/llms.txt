@@ -1,0 +1,50 @@
+# Key Generator - Generate Secure Keys & Secrets Online
+> Generate cryptographically secure keys, API keys, passwords, UUIDs, JWT secrets, and more. Fast, secure, and free key generation tool for developers.
+
+## Contact
+Email: contact@key-generator.com
+
+## Home
+- [Key Generator - Generate Secure Keys & Secrets Online](https://key-generator.com)
+
+## Privacy policy
+- [Privacy Policy - Key Generator](https://key-generator.com/privacy-policy)
+
+## Terms of service
+- [Terms of Service - Key Generator](https://key-generator.com/terms-of-service)
+
+## Next js auth secret generator
+- [Next.js Auth Secret Generator - Key Generator](https://key-generator.com/next-js-auth-secret-generator)
+
+## Secure strong secret key generator
+- [Secure & Strong Secret Key Generator - Key Generator](https://key-generator.com/secure-strong-secret-key-generator)
+
+## Random api key generator
+- [Random API Key Generator - Key Generator](https://key-generator.com/random-api-key-generator)
+
+## Random password generator
+- [Random Password Generator - Key Generator](https://key-generator.com/random-password-generator)
+
+## Random jwt secret generator
+- [Random JWT Secret Generator - Key Generator](https://key-generator.com/random-jwt-secret-generator)
+
+## Random uuid generator
+- [Random UUID Generator - Key Generator](https://key-generator.com/random-uuid-generator)
+
+## Random string generator
+- [Random String Generator - Key Generator](https://key-generator.com/random-string-generator)
+
+## Random hex color generator
+- [Random Hex Color Generator - Key Generator](https://key-generator.com/random-hex-color-generator)
+
+## Random base64 string generator
+- [Random Base64 String Generator - Key Generator](https://key-generator.com/random-base64-string-generator)
+
+## Random alphanumeric string generator
+- [Random Alphanumeric String Generator - Key Generator](https://key-generator.com/random-alphanumeric-string-generator)
+
+## Random numeric string generator
+- [Random Numeric String Generator - Key Generator](https://key-generator.com/random-numeric-string-generator)
+
+## Random mac address generator
+- [Random MAC Address Generator - Key Generator](https://key-generator.com/random-mac-address-generator)
