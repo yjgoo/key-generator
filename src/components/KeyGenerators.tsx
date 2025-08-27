@@ -13,7 +13,7 @@ function getGeneratorSlug(generatorId: string): string {
   const slugMap: Record<string, string> = {
     'nextjs-auth': 'next-js-auth-secret-generator',
     'secure-key': 'secure-strong-secret-key-generator',
-    'jwt-secret': 'random-jwt-secret-generator',
+    'jwt-secret-key': 'random-jwt-secret-key-generator',
     'password': 'random-password-generator',
     'random-string': 'random-string-generator',
     'uuid': 'random-uuid-generator',
@@ -81,7 +81,7 @@ function GeneratorCard({ generator }: GeneratorCardProps) {
               {Object.entries(generator.defaultOptions).map(([key, defaultValue]) => (
                 <div key={key} className="flex items-center space-x-1">
                   <label className="text-xs text-gray-500 capitalize">{key}:</label>
-                  {generator.id === 'jwt-secret' && key === 'length' ? (
+                  {generator.id === 'jwt-secret-key' && key === 'length' ? (
                     <div className="flex flex-col items-center space-y-1">
                       <input
                         type="range"

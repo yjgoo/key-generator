@@ -29,7 +29,7 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">Key Types</h3>
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/random-api-key-generator" className="hover:text-white transition-colors">API Keys</Link></li>
-              <li><Link href="/random-jwt-secret-generator" className="hover:text-white transition-colors">JWT Secrets</Link></li>
+              <li><Link href="/random-jwt-secret-key-generator" className="hover:text-white transition-colors">JWT Secret Keys</Link></li>
               <li><Link href="/random-password-generator" className="hover:text-white transition-colors">Passwords</Link></li>
               <li><Link href="/random-uuid-generator" className="hover:text-white transition-colors">UUIDs</Link></li>
               <li><Link href="/next-js-auth-secret-generator" className="hover:text-white transition-colors">Auth Secrets</Link></li>

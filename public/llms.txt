@@ -26,7 +26,7 @@ Email: contact@key-generator.com
 - [Random Password Generator - Key Generator](https://key-generator.com/random-password-generator)
 
 ## Random jwt secret generator
-- [Random JWT Secret Generator - Key Generator](https://key-generator.com/random-jwt-secret-generator)
+- [Random JWT Secret Key Generator - Key Generator](https://key-generator.com/random-jwt-secret-key-generator)
 
 ## Random uuid generator
 - [Random UUID Generator - Key Generator](https://key-generator.com/random-uuid-generator)

@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'alphanumeric': 'random-alphanumeric-string-generator',
     'numeric': 'random-numeric-string-generator',
     'mac-address': 'random-mac-address-generator',
-    'jwt-secret': 'random-jwt-secret-generator',
+    'jwt-secret-key': 'random-jwt-secret-key-generator',
   }
 
   // Static pages

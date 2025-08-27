@@ -92,13 +92,13 @@ export function GeneratorPage({ generator, seoDescription, pageUrl }: GeneratorP
                     <div key={key} className="space-y-2">
                       <label htmlFor={key} className="block text-sm font-medium text-gray-700 capitalize">
                         {key.replace(/([A-Z])/g, ' $1').trim()}
-                        {generator.id === 'jwt-secret' && key === 'length' && (
+                        {generator.id === 'jwt-secret-key' && key === 'length' && (
                           <span className="ml-2 text-gray-500 text-xs">
                             ({getOptionValue(key, defaultValue)} characters = {getOptionValue(key, defaultValue) * 4} bits)
                           </span>
                         )}
                       </label>
-                      {generator.id === 'jwt-secret' && key === 'length' ? (
+                      {generator.id === 'jwt-secret-key' && key === 'length' ? (
                         <div className="space-y-2">
                           <input
                             type="range"

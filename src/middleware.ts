@@ -1,6 +1,14 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-export function middleware() {
+export function middleware(request: NextRequest) {
+  // Handle permanent redirects
+  if (request.nextUrl.pathname === '/random-jwt-secret-generator') {
+    return NextResponse.redirect(
+      new URL('/random-jwt-secret-key-generator', request.url),
+      { status: 301 }
+    )
+  }
+
   // Add security headers
   const response = NextResponse.next()
   

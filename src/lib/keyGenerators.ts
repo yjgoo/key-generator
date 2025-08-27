@@ -80,9 +80,9 @@ export const keyGenerators: KeyGenerator[] = [
     defaultOptions: { length: 16 },
   },
   {
-    id: 'jwt-secret',
-    title: 'Random JWT Secret Generator',
-    description: 'Generate secure secrets for JWT token signing',
+    id: 'jwt-secret-key',
+    title: 'Random JWT Secret Key Generator',
+    description: 'Generate secure secret keys for JWT token signing',
     defaultOptions: { length: 64 },
   },
   {
@@ -180,7 +180,7 @@ export const generateKey = (id: string, options?: Record<string, number | string
       }
       return mac;
 
-    case 'jwt-secret':
+    case 'jwt-secret-key':
       // Generate cryptographically secure JWT secret using hex encoding
       // Similar to require('crypto').randomBytes(32).toString('hex')
       // Length in characters (hex chars), so bytes = length / 2
@@ -208,7 +208,7 @@ export const getGeneratorPath = (id: string): string => {
     'secure-key': '/secure-strong-secret-key-generator',
     'api-key': '/random-api-key-generator',
     'password': '/random-password-generator',
-    'jwt-secret': '/random-jwt-secret-generator',
+    'jwt-secret-key': '/random-jwt-secret-key-generator',
     'uuid': '/random-uuid-generator',
     'random-string': '/random-string-generator',
     'hex-color': '/random-hex-color-generator',

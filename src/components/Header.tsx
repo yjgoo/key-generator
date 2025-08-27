@@ -23,7 +23,7 @@ export function Header() {
     const slugMap: Record<string, string> = {
       'nextjs-auth': 'next-js-auth-secret-generator',
       'secure-key': 'secure-strong-secret-key-generator',
-      'jwt-secret': 'random-jwt-secret-generator',
+      'jwt-secret-key': 'random-jwt-secret-key-generator',
       'password': 'random-password-generator',
       'random-string': 'random-string-generator',
       'uuid': 'random-uuid-generator',
