@@ -35,7 +35,7 @@ export function Hero() {
       <div className="max-w-4xl mx-auto text-center">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
           Generate Secure
-          <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"> Keys</span>
+          <span className="text-blue-600"> Keys</span>
         </h1>
         
         <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
@@ -70,7 +70,7 @@ export function Hero() {
           
           <button
             onClick={generateNewKey}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2.5 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 transform hover:scale-105"
+            className="w-full bg-blue-600 text-white py-2.5 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-200 transform hover:scale-105"
           >
             🔄 Generate New Key
           </button>

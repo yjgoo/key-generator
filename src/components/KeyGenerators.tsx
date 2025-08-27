@@ -146,7 +146,7 @@ function GeneratorCard({ generator }: GeneratorCardProps) {
 
       <button
         onClick={generateValue}
-        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2.5 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 transform hover:scale-105"
+        className="w-full bg-blue-600 text-white py-2.5 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-200 transform hover:scale-105"
       >
         🔄 Generate New Key
       </button>
