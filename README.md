@@ -1,3 +1,6 @@
+
+Use it online now : [https://key-generator.com/](https://key-generator.com/)
+
 # Key Generator
 
 A secure, fast, and user-friendly key generation tool built with Next.js and TypeScript. Generate various types of cryptographically secure keys, passwords, and tokens for your applications.
