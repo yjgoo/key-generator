@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { BackToTop } from "@/components/BackToTop";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
@@ -49,6 +50,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8391294688027876"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className="antialiased">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         {children}
