@@ -25,6 +25,7 @@ export function Header() {
       'secure-key': 'secure-strong-secret-key-generator',
       'jwt-secret-key': 'random-jwt-secret-key-generator',
       'password': 'random-password-generator',
+      'bcrypt': 'bcrypt-hash-generator',
       'random-string': 'random-string-generator',
       'uuid': 'random-uuid-generator',
       'api-key': 'random-api-key-generator',

@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'secure-key': 'secure-strong-secret-key-generator',
     'api-key': 'random-api-key-generator',
     'password': 'random-password-generator',
+    'bcrypt': 'bcrypt-hash-generator',
     'random-string': 'random-string-generator',
     'uuid': 'random-uuid-generator',
     'hex-color': 'random-hex-color-generator',

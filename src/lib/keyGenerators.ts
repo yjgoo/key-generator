@@ -1,3 +1,5 @@
+import * as bcrypt from 'bcryptjs';
+
 export interface KeyGenerator {
   id: string;
   title: string;
@@ -80,6 +82,12 @@ export const keyGenerators: KeyGenerator[] = [
     defaultOptions: { length: 16 },
   },
   {
+    id: 'bcrypt',
+    title: 'Bcrypt Hash Generator',
+    description: 'Generate Bcrypt password hashes',
+    defaultOptions: { rounds: 10 },
+  },
+  {
     id: 'jwt-secret-key',
     title: 'Random JWT Secret Key Generator',
     description: 'Generate secure secret keys for JWT token signing',
@@ -150,6 +158,12 @@ export const generateKey = (id: string, options?: Record<string, number | string
       const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
       return generateRandomString(getNumberOption('length', 16), charset);
 
+    case 'bcrypt':
+      const rounds = getNumberOption('rounds', 10);
+      const password = generateRandomString(12, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+      const hash = bcrypt.hashSync(password, rounds);
+      return `Password: ${password}\nHash: ${hash}`;
+
     case 'random-string':
       const stringCharset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       return generateRandomString(getNumberOption('length', 20), stringCharset);
@@ -208,6 +222,7 @@ export const getGeneratorPath = (id: string): string => {
     'secure-key': '/secure-strong-secret-key-generator',
     'api-key': '/random-api-key-generator',
     'password': '/random-password-generator',
+    'bcrypt': '/bcrypt-hash-generator',
     'jwt-secret-key': '/random-jwt-secret-key-generator',
     'uuid': '/random-uuid-generator',
     'random-string': '/random-string-generator',
