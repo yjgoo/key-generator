@@ -30,7 +30,7 @@ export default function RsaKeyGeneratorPage() {
         hash: 'SHA-256',
       } as const;
 
-      const usages = algorithm === 'RSA-OAEP' ? ['encrypt', 'decrypt'] : ['sign', 'verify'];
+      const usages: KeyUsage[] = algorithm === 'RSA-OAEP' ? ['encrypt', 'decrypt'] : ['sign', 'verify'];
       const keyPair = await crypto.subtle.generateKey(algo, true, usages);
       const publicPem = await exportKeyToPem(keyPair.publicKey, 'spki', 'PUBLIC KEY');
       const privatePem = await exportKeyToPem(keyPair.privateKey, 'pkcs8', 'PRIVATE KEY');
