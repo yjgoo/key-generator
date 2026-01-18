@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import CryptoJS from 'crypto-js';
 import { CryptoPageShell } from '@/components/crypto/CryptoPageShell';
+import { CopyButton } from '@/components/crypto/CopyButton';
 
 export default function DesEncryptionPage() {
   const [plaintext, setPlaintext] = useState('');
@@ -47,7 +48,10 @@ export default function DesEncryptionPage() {
     >
       <div className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Plaintext</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Plaintext</label>
+            <CopyButton text={plaintext} label="Copy" />
+          </div>
           <textarea
             value={plaintext}
             onChange={(e) => setPlaintext(e.target.value)}
@@ -59,7 +63,10 @@ export default function DesEncryptionPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Key (Base64)</label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium text-gray-700">Key (Base64)</label>
+              <CopyButton text={keyBase64} label="Copy" />
+            </div>
             <textarea
               value={keyBase64}
               onChange={(e) => setKeyBase64(e.target.value)}
@@ -69,7 +76,10 @@ export default function DesEncryptionPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">IV (Base64)</label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium text-gray-700">IV (Base64)</label>
+              <CopyButton text={ivBase64} label="Copy" />
+            </div>
             <textarea
               value={ivBase64}
               onChange={(e) => setIvBase64(e.target.value)}
@@ -103,7 +113,10 @@ export default function DesEncryptionPage() {
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Ciphertext (Base64)</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Ciphertext (Base64)</label>
+            <CopyButton text={ciphertext} label="Copy" />
+          </div>
           <textarea
             value={ciphertext}
             readOnly

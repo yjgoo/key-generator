@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { CryptoPageShell } from '@/components/crypto/CryptoPageShell';
+import { CopyButton } from '@/components/crypto/CopyButton';
 import { arrayBufferToBase64, importKeyFromPem } from '@/lib/cryptoUtils';
 
 export default function RsaSignPage() {
@@ -44,7 +45,10 @@ export default function RsaSignPage() {
     >
       <div className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Message</label>
+            <CopyButton text={message} label="Copy" />
+          </div>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -54,7 +58,10 @@ export default function RsaSignPage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Private Key (PEM)</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Private Key (PEM)</label>
+            <CopyButton text={privateKeyPem} label="Copy" />
+          </div>
           <textarea
             value={privateKeyPem}
             onChange={(e) => setPrivateKeyPem(e.target.value)}
@@ -79,7 +86,10 @@ export default function RsaSignPage() {
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Signature (Base64)</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Signature (Base64)</label>
+            <CopyButton text={signature} label="Copy" />
+          </div>
           <textarea
             value={signature}
             readOnly

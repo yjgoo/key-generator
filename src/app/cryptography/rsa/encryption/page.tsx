@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { CryptoPageShell } from '@/components/crypto/CryptoPageShell';
+import { CopyButton } from '@/components/crypto/CopyButton';
 import { arrayBufferToBase64, importKeyFromPem } from '@/lib/cryptoUtils';
 
 export default function RsaEncryptionPage() {
@@ -51,7 +52,10 @@ export default function RsaEncryptionPage() {
     >
       <div className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Plaintext</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Plaintext</label>
+            <CopyButton text={plaintext} label="Copy" />
+          </div>
           <textarea
             value={plaintext}
             onChange={(e) => setPlaintext(e.target.value)}
@@ -61,7 +65,10 @@ export default function RsaEncryptionPage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Public Key (PEM)</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Public Key (PEM)</label>
+            <CopyButton text={publicKeyPem} label="Copy" />
+          </div>
           <textarea
             value={publicKeyPem}
             onChange={(e) => setPublicKeyPem(e.target.value)}
@@ -86,7 +93,10 @@ export default function RsaEncryptionPage() {
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Ciphertext (Base64)</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Ciphertext (Base64)</label>
+            <CopyButton text={ciphertext} label="Copy" />
+          </div>
           <textarea
             value={ciphertext}
             readOnly

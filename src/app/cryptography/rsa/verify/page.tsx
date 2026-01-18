@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { CryptoPageShell } from '@/components/crypto/CryptoPageShell';
+import { CopyButton } from '@/components/crypto/CopyButton';
 import { base64ToArrayBuffer, importKeyFromPem } from '@/lib/cryptoUtils';
 
 export default function RsaVerifyPage() {
@@ -48,7 +49,10 @@ export default function RsaVerifyPage() {
     >
       <div className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Message</label>
+            <CopyButton text={message} label="Copy" />
+          </div>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -58,7 +62,10 @@ export default function RsaVerifyPage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Public Key (PEM)</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Public Key (PEM)</label>
+            <CopyButton text={publicKeyPem} label="Copy" />
+          </div>
           <textarea
             value={publicKeyPem}
             onChange={(e) => setPublicKeyPem(e.target.value)}
@@ -68,7 +75,10 @@ export default function RsaVerifyPage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Signature (Base64)</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Signature (Base64)</label>
+            <CopyButton text={signature} label="Copy" />
+          </div>
           <textarea
             value={signature}
             onChange={(e) => setSignature(e.target.value)}

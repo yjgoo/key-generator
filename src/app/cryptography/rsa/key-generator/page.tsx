@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { CryptoPageShell } from '@/components/crypto/CryptoPageShell';
+import { CopyButton } from '@/components/crypto/CopyButton';
 import { exportKeyToPem } from '@/lib/cryptoUtils';
 
 export default function RsaKeyGeneratorPage() {
@@ -11,6 +12,12 @@ export default function RsaKeyGeneratorPage() {
   const [privateKeyPem, setPrivateKeyPem] = useState('');
   const [error, setError] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+
+  const toRawPem = (pem: string) =>
+    pem.replace(/-----BEGIN [^-]+-----/g, '').replace(/-----END [^-]+-----/g, '').replace(/\s+/g, '');
+
+  const rawPublicKey = toRawPem(publicKeyPem);
+  const rawPrivateKey = toRawPem(privateKeyPem);
 
   const generateKeys = async () => {
     setError('');
@@ -86,7 +93,17 @@ export default function RsaKeyGeneratorPage() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Public Key (PEM)</label>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <label className="block text-sm font-medium text-gray-700">Public Key (PEM)</label>
+              <div className="flex flex-wrap items-center gap-2">
+                <CopyButton text={publicKeyPem} label="Copy PEM" />
+                <CopyButton
+                  text={rawPublicKey}
+                  label="Copy Raw Public Key"
+                  title="Copy raw public key (no headers or line breaks)"
+                />
+              </div>
+            </div>
             <textarea
               value={publicKeyPem}
               readOnly
@@ -96,7 +113,17 @@ export default function RsaKeyGeneratorPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Private Key (PEM)</label>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <label className="block text-sm font-medium text-gray-700">Private Key (PEM)</label>
+              <div className="flex flex-wrap items-center gap-2">
+                <CopyButton text={privateKeyPem} label="Copy PEM" />
+                <CopyButton
+                  text={rawPrivateKey}
+                  label="Copy Raw Private Key"
+                  title="Copy raw private key (no headers or line breaks)"
+                />
+              </div>
+            </div>
             <textarea
               value={privateKeyPem}
               readOnly
