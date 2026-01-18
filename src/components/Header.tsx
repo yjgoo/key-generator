@@ -6,9 +6,11 @@ import { keyGenerators } from '@/lib/keyGenerators';
 
 export function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCryptoDropdownOpen, setIsCryptoDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const cryptoCloseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleGeneratorClick = (generatorId: string) => {
     setIsDropdownOpen(false);
@@ -58,6 +60,20 @@ export function Header() {
     }, 150); // 150ms delay
   };
 
+  const handleCryptoMouseEnter = () => {
+    if (cryptoCloseTimeoutRef.current) {
+      clearTimeout(cryptoCloseTimeoutRef.current);
+      cryptoCloseTimeoutRef.current = null;
+    }
+    setIsCryptoDropdownOpen(true);
+  };
+
+  const handleCryptoMouseLeave = () => {
+    cryptoCloseTimeoutRef.current = setTimeout(() => {
+      setIsCryptoDropdownOpen(false);
+    }, 150);
+  };
+
   // Handle clicks outside the mobile menu to close it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -79,6 +95,9 @@ export function Header() {
       // Clean up timeout on unmount
       if (closeTimeoutRef.current) {
         clearTimeout(closeTimeoutRef.current);
+      }
+      if (cryptoCloseTimeoutRef.current) {
+        clearTimeout(cryptoCloseTimeoutRef.current);
       }
     };
   }, [isMobileMenuOpen]);
@@ -141,6 +160,66 @@ export function Header() {
                 </div>
               )}
             </div>
+
+            {/* Cryptography Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={handleCryptoMouseEnter}
+              onMouseLeave={handleCryptoMouseLeave}
+            >
+              <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center space-x-1">
+                <span>Cryptography</span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${isCryptoDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {isCryptoDropdownOpen && (
+                <div
+                  className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                  onMouseEnter={handleCryptoMouseEnter}
+                  onMouseLeave={handleCryptoMouseLeave}
+                >
+                  <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">RSA</div>
+                  <Link href="/cryptography/rsa/key-generator" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    RSA Key Generator
+                  </Link>
+                  <Link href="/cryptography/rsa/sign" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    RSA Sign
+                  </Link>
+                  <Link href="/cryptography/rsa/verify" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    RSA Verify
+                  </Link>
+                  <Link href="/cryptography/rsa/encryption" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    RSA Encryption
+                  </Link>
+                  <Link href="/cryptography/rsa/decryption" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    RSA Decryption
+                  </Link>
+
+                  <div className="mt-2 px-4 py-2 text-xs font-semibold text-gray-500 uppercase">AES</div>
+                  <Link href="/cryptography/aes/encryption" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    AES Encryption
+                  </Link>
+                  <Link href="/cryptography/aes/decryption" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    AES Decryption
+                  </Link>
+
+                  <div className="mt-2 px-4 py-2 text-xs font-semibold text-gray-500 uppercase">DES</div>
+                  <Link href="/cryptography/des/encryption" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    DES Encryption
+                  </Link>
+                  <Link href="/cryptography/des/decryption" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    DES Decryption
+                  </Link>
+                </div>
+              )}
+            </div>
             
             <Link href="/#about" className="text-gray-600 hover:text-gray-900 transition-colors">
               About
@@ -180,6 +259,80 @@ export function Header() {
                       <div className="text-xs text-gray-400 mt-0.5">{generator.description}</div>
                     </button>
                   ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-gray-900 font-medium mb-2 px-4">Cryptography</div>
+                <div className="space-y-1">
+                  <div className="px-4 pt-2 text-xs font-semibold text-gray-500 uppercase">RSA</div>
+                  <Link
+                    href="/cryptography/rsa/key-generator"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    RSA Key Generator
+                  </Link>
+                  <Link
+                    href="/cryptography/rsa/sign"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    RSA Sign
+                  </Link>
+                  <Link
+                    href="/cryptography/rsa/verify"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    RSA Verify
+                  </Link>
+                  <Link
+                    href="/cryptography/rsa/encryption"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    RSA Encryption
+                  </Link>
+                  <Link
+                    href="/cryptography/rsa/decryption"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    RSA Decryption
+                  </Link>
+
+                  <div className="px-4 pt-3 text-xs font-semibold text-gray-500 uppercase">AES</div>
+                  <Link
+                    href="/cryptography/aes/encryption"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    AES Encryption
+                  </Link>
+                  <Link
+                    href="/cryptography/aes/decryption"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    AES Decryption
+                  </Link>
+
+                  <div className="px-4 pt-3 text-xs font-semibold text-gray-500 uppercase">DES</div>
+                  <Link
+                    href="/cryptography/des/encryption"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    DES Encryption
+                  </Link>
+                  <Link
+                    href="/cryptography/des/decryption"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    DES Decryption
+                  </Link>
                 </div>
               </div>
               
