@@ -1,7 +1,10 @@
 import { MetadataRoute } from 'next'
 import { keyGenerators } from '@/lib/keyGenerators'
+import { listPublishedPosts } from '@/lib/posts'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const runtime = 'nodejs'
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://key-generator.com'
   
   // Generator page mappings
@@ -42,6 +45,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${baseUrl}/posts`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/privacy-policy`,
       lastModified: new Date(),
       changeFrequency: 'yearly' as const,
@@ -75,5 +84,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   })
 
-  return [...staticPages, ...cryptographyEntries, ...generatorPages]
+  const posts = await listPublishedPosts()
+  const postEntries = posts.map((post) => ({
+    url: `${baseUrl}/posts/${post.slug}`,
+    lastModified: post.published_at ? new Date(post.published_at) : new Date(post.created_at),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
+  return [...staticPages, ...cryptographyEntries, ...generatorPages, ...postEntries]
 }

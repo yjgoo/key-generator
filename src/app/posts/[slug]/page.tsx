@@ -1,0 +1,196 @@
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { addCommentAction } from './actions';
+import { getPublishedPostBySlug, listComments } from '@/lib/posts';
+
+interface PageProps {
+  params: { slug: string };
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = params;
+  const post = await getPublishedPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: 'Post Not Found - Key Generator',
+      robots: { index: false, follow: false },
+    };
+  }
+
+  return {
+    title: `${post.title} - Key Generator`,
+    description: post.excerpt || post.title,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt || post.title,
+      type: 'article',
+      url: `https://key-generator.com/posts/${post.slug}`,
+    },
+    twitter: {
+      card: 'summary',
+      title: post.title,
+      description: post.excerpt || post.title,
+    },
+    alternates: {
+      canonical: `https://key-generator.com/posts/${post.slug}`,
+    },
+  };
+}
+
+function renderContent(content: string) {
+  return content.split('\n').map((line, index) => (
+    <p key={index} className="text-gray-700 leading-7 mb-4">
+      {line || '\u00A0'}
+    </p>
+  ));
+}
+
+export default async function PostDetailPage({ params }: PageProps) {
+  const { slug } = params;
+  const post = await getPublishedPostBySlug(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  const comments = await listComments(post.id);
+  const grouped = new Map<string | null, typeof comments>();
+
+  comments.forEach((comment) => {
+    const key = comment.parent_id ?? null;
+    const list = grouped.get(key) ?? [];
+    list.push(comment);
+    grouped.set(key, list);
+  });
+
+  const renderComments = (parentId: string | null, depth = 0) => {
+    const list = grouped.get(parentId) ?? [];
+    if (list.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className={depth === 0 ? 'space-y-6' : 'mt-4 space-y-4 border-l border-gray-200 pl-4'}>
+        {list.map((comment) => (
+          <div key={comment.id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-semibold text-gray-900">{comment.author_name}</div>
+              <div className="text-xs text-gray-400">{new Date(comment.created_at).toLocaleString()}</div>
+            </div>
+            <p className="mt-2 text-gray-700 leading-6">{comment.content}</p>
+
+            <details className="mt-3">
+              <summary className="cursor-pointer text-sm text-blue-600">回复</summary>
+              <form action={addCommentAction} className="mt-3 space-y-3">
+                <input type="hidden" name="postId" value={post.id} />
+                <input type="hidden" name="parentId" value={comment.id} />
+                <input type="hidden" name="slug" value={post.slug} />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <input
+                    type="text"
+                    name="authorName"
+                    placeholder="你的名字"
+                    required
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                  <input
+                    type="email"
+                    name="authorEmail"
+                    placeholder="邮箱 (可选)"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+                <textarea
+                  name="content"
+                  rows={3}
+                  required
+                  placeholder="回复内容"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+                <button
+                  type="submit"
+                  className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+                >
+                  提交回复
+                </button>
+              </form>
+            </details>
+
+            {renderComments(comment.id, depth + 1)}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+      <Header />
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <article className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+          <div className="text-sm text-gray-500">
+            {post.published_at
+              ? new Date(post.published_at).toLocaleDateString()
+              : new Date(post.created_at).toLocaleDateString()}
+          </div>
+          <h1 className="mt-2 text-3xl font-bold text-gray-900">{post.title}</h1>
+          {post.excerpt && <p className="mt-3 text-gray-600">{post.excerpt}</p>}
+
+          <div className="mt-6">{renderContent(post.content)}</div>
+        </article>
+
+        <section className="mt-10">
+          <h2 className="text-2xl font-semibold text-gray-900">评论与回复</h2>
+          <div className="mt-6 space-y-6">
+            {renderComments(null)}
+            {comments.length === 0 && (
+              <div className="rounded-lg border border-dashed border-gray-300 bg-white p-6 text-center text-gray-500">
+                还没有评论，来发表第一条吧。
+              </div>
+            )}
+          </div>
+
+          <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900">发表评论</h3>
+            <form action={addCommentAction} className="mt-4 space-y-4">
+              <input type="hidden" name="postId" value={post.id} />
+              <input type="hidden" name="slug" value={post.slug} />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <input
+                  type="text"
+                  name="authorName"
+                  placeholder="你的名字"
+                  required
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+                <input
+                  type="email"
+                  name="authorEmail"
+                  placeholder="邮箱 (可选)"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+              <textarea
+                name="content"
+                rows={4}
+                required
+                placeholder="评论内容"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+              <button
+                type="submit"
+                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+              >
+                提交评论
+              </button>
+            </form>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
+}

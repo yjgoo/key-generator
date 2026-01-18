@@ -17,3 +17,13 @@ export function generatePageTitle(generatorTitle: string): string {
 export function generateMetaDescription(generatorTitle: string, description: string): string {
   return `Generate secure ${generatorTitle.toLowerCase()} instantly. ${description} Free, secure, and browser-based key generator tool.`;
 }
+
+export function slugifyText(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .trim();
+}

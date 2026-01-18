@@ -20,7 +20,7 @@ export function Header() {
       clearTimeout(closeTimeoutRef.current);
       closeTimeoutRef.current = null;
     }
-    
+
     // Create slug from generator ID
     const slugMap: Record<string, string> = {
       'nextjs-auth': 'next-js-auth-secret-generator',
@@ -37,7 +37,7 @@ export function Header() {
       'numeric': 'random-numeric-string-generator',
       'mac-address': 'random-mac-address-generator',
     };
-    
+
     const slug = slugMap[generatorId];
     if (slug) {
       window.location.href = `/${slug}`;
@@ -108,19 +108,22 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <img 
-                src="/logo.png" 
-                alt="Key Generator Logo" 
+              <img
+                src="/logo.png"
+                alt="Key Generator Logo"
                 className="w-8 h-8 rounded-lg"
               />
               <span className="text-xl font-bold text-gray-900">Key Generator</span>
             </Link>
           </div>
-          
+
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
+            <Link href="/posts" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Articles
+            </Link>
             {/* Generators Dropdown */}
-            <div 
+            <div
               className="relative"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
@@ -129,18 +132,18 @@ export function Header() {
                 className="text-gray-600 hover:text-gray-900 transition-colors flex items-center space-x-1"
               >
                 <span>Generators</span>
-                <svg 
-                  className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              
+
               {isDropdownOpen && (
-                <div 
+                <div
                   className="absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
@@ -220,7 +223,7 @@ export function Header() {
                 </div>
               )}
             </div>
-            
+
             <Link href="/#about" className="text-gray-600 hover:text-gray-900 transition-colors">
               About
             </Link>
@@ -244,6 +247,13 @@ export function Header() {
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div ref={mobileMenuRef} className="md:hidden border-t border-gray-200 py-4">
+            <Link
+              href="/posts"
+              className="block px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Articles
+            </Link>
             <div className="space-y-4">
               {/* Mobile Generators List */}
               <div>
@@ -335,17 +345,18 @@ export function Header() {
                   </Link>
                 </div>
               </div>
-              
+
               <div className="border-t border-gray-200 pt-4 space-y-2">
-                <Link 
-                  href="#about" 
+                <Link
+                  href="#about"
                   className="block px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   About
                 </Link>
-                <Link 
-                  href="#faq" 
+
+                <Link
+                  href="#faq"
                   className="block px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
