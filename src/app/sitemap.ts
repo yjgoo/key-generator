@@ -21,6 +21,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'jwt-secret-key': 'random-jwt-secret-key-generator',
   }
 
+  const cryptographyPages = [
+    '/cryptography/rsa/key-generator',
+    '/cryptography/rsa/sign',
+    '/cryptography/rsa/verify',
+    '/cryptography/rsa/encryption',
+    '/cryptography/rsa/decryption',
+    '/cryptography/aes/encryption',
+    '/cryptography/aes/decryption',
+    '/cryptography/des/encryption',
+    '/cryptography/des/decryption',
+  ]
+
   // Static pages
   const staticPages = [
     {
@@ -28,60 +40,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 1,
-    },
-    {
-      url: `${baseUrl}/cryptography/rsa/key-generator`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/cryptography/rsa/sign`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/cryptography/rsa/verify`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/cryptography/rsa/encryption`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/cryptography/rsa/decryption`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/cryptography/aes/encryption`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/cryptography/aes/decryption`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/cryptography/des/encryption`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/cryptography/des/decryption`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
     },
     {
       url: `${baseUrl}/privacy-policy`,
@@ -105,5 +63,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
-  return [...staticPages, ...generatorPages]
+  const cryptographyEntries = cryptographyPages.map((path) => {
+    const isKeyGenerator = path.endsWith('/key-generator')
+    const isRsa = path.startsWith('/cryptography/rsa')
+    const priority = isKeyGenerator ? 0.8 : isRsa ? 0.7 : 0.6
+    return {
+      url: `${baseUrl}${path}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority,
+    }
+  })
+
+  return [...staticPages, ...cryptographyEntries, ...generatorPages]
 }
