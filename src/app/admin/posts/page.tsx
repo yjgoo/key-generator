@@ -30,21 +30,21 @@ export default async function AdminPostsPage() {
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Posts 管理</h1>
-            <p className="text-sm text-gray-600 mt-1">创建、发布和管理文章。</p>
+            <h1 className="text-3xl font-bold text-gray-900">Posts</h1>
+            <p className="text-sm text-gray-600 mt-1">Create, publish, and manage articles.</p>
           </div>
           <div className="flex items-center gap-3">
             <Link
               href="/admin/posts/new"
               className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
             >
-              + 新建文章
+              + New post
             </Link>
             <Link
               href="/admin/logout"
               className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
             >
-              退出登录
+              Sign out
             </Link>
           </div>
         </div>
@@ -53,10 +53,10 @@ export default async function AdminPostsPage() {
           <table className="min-w-full text-sm">
             <thead className="bg-gray-50 text-gray-600">
               <tr>
-                <th className="px-6 py-3 text-left font-semibold">标题</th>
-                <th className="px-6 py-3 text-left font-semibold">状态</th>
-                <th className="px-6 py-3 text-left font-semibold">发布时间</th>
-                <th className="px-6 py-3 text-right font-semibold">操作</th>
+                <th className="px-6 py-3 text-left font-semibold">Title</th>
+                <th className="px-6 py-3 text-left font-semibold">Status</th>
+                <th className="px-6 py-3 text-left font-semibold">Published</th>
+                <th className="px-6 py-3 text-right font-semibold">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -76,7 +76,7 @@ export default async function AdminPostsPage() {
                             : 'bg-yellow-100 text-yellow-700'
                         }`}
                       >
-                        {isPublished ? '已发布' : '草稿'}
+                        {isPublished ? 'Published' : 'Draft'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-gray-600">
@@ -88,7 +88,7 @@ export default async function AdminPostsPage() {
                           href={`/posts/${post.slug}`}
                           className="text-blue-600 hover:text-blue-700"
                         >
-                          查看
+                          View
                         </Link>
                         <form action={togglePublishAction}>
                           <input type="hidden" name="postId" value={post.id} />
@@ -101,7 +101,7 @@ export default async function AdminPostsPage() {
                             type="submit"
                             className="text-gray-600 hover:text-gray-800"
                           >
-                            {isPublished ? '下线' : '发布'}
+                            {isPublished ? 'Unpublish' : 'Publish'}
                           </button>
                         </form>
                         <form action={deletePostAction}>
@@ -110,7 +110,7 @@ export default async function AdminPostsPage() {
                             type="submit"
                             className="text-red-600 hover:text-red-700"
                           >
-                            删除
+                            Delete
                           </button>
                         </form>
                       </div>
@@ -121,7 +121,7 @@ export default async function AdminPostsPage() {
               {posts.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-6 py-10 text-center text-gray-500">
-                    还没有文章，点击“新建文章”开始发布吧。
+                    No posts yet. Click “New post” to get started.
                   </td>
                 </tr>
               )}

@@ -25,8 +25,8 @@ export default async function NewPostPage() {
       <Header />
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">新建文章</h1>
-          <p className="text-sm text-gray-600 mb-6">撰写并发布新的文章内容。</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">New post</h1>
+          <p className="text-sm text-gray-600 mb-6">Write and publish a new article.</p>
           <PostForm />
         </div>
       </main>

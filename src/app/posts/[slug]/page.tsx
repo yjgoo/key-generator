@@ -6,11 +6,11 @@ import { addCommentAction } from './actions';
 import { getPublishedPostBySlug, listComments } from '@/lib/posts';
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = params;
+  const { slug } = await params;
   const post = await getPublishedPostBySlug(slug);
 
   if (!post) {
@@ -49,7 +49,7 @@ function renderContent(content: string) {
 }
 
 export default async function PostDetailPage({ params }: PageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const post = await getPublishedPostBySlug(slug);
 
   if (!post) {
@@ -83,7 +83,7 @@ export default async function PostDetailPage({ params }: PageProps) {
             <p className="mt-2 text-gray-700 leading-6">{comment.content}</p>
 
             <details className="mt-3">
-              <summary className="cursor-pointer text-sm text-blue-600">回复</summary>
+              <summary className="cursor-pointer text-sm text-blue-600">Reply</summary>
               <form action={addCommentAction} className="mt-3 space-y-3">
                 <input type="hidden" name="postId" value={post.id} />
                 <input type="hidden" name="parentId" value={comment.id} />
@@ -92,14 +92,14 @@ export default async function PostDetailPage({ params }: PageProps) {
                   <input
                     type="text"
                     name="authorName"
-                    placeholder="你的名字"
+                    placeholder="Your name"
                     required
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                   <input
                     type="email"
                     name="authorEmail"
-                    placeholder="邮箱 (可选)"
+                    placeholder="Email (optional)"
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
@@ -107,14 +107,14 @@ export default async function PostDetailPage({ params }: PageProps) {
                   name="content"
                   rows={3}
                   required
-                  placeholder="回复内容"
+                  placeholder="Write your reply"
                   className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
                 <button
                   type="submit"
                   className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
                 >
-                  提交回复
+                  Post reply
                 </button>
               </form>
             </details>
@@ -143,18 +143,18 @@ export default async function PostDetailPage({ params }: PageProps) {
         </article>
 
         <section className="mt-10">
-          <h2 className="text-2xl font-semibold text-gray-900">评论与回复</h2>
+          <h2 className="text-2xl font-semibold text-gray-900">Comments & Replies</h2>
           <div className="mt-6 space-y-6">
             {renderComments(null)}
             {comments.length === 0 && (
               <div className="rounded-lg border border-dashed border-gray-300 bg-white p-6 text-center text-gray-500">
-                还没有评论，来发表第一条吧。
+                No comments yet. Be the first to comment.
               </div>
             )}
           </div>
 
           <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-900">发表评论</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Leave a comment</h3>
             <form action={addCommentAction} className="mt-4 space-y-4">
               <input type="hidden" name="postId" value={post.id} />
               <input type="hidden" name="slug" value={post.slug} />
@@ -162,14 +162,14 @@ export default async function PostDetailPage({ params }: PageProps) {
                 <input
                   type="text"
                   name="authorName"
-                  placeholder="你的名字"
+                  placeholder="Your name"
                   required
                   className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
                 <input
                   type="email"
                   name="authorEmail"
-                  placeholder="邮箱 (可选)"
+                  placeholder="Email (optional)"
                   className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
@@ -177,14 +177,14 @@ export default async function PostDetailPage({ params }: PageProps) {
                 name="content"
                 rows={4}
                 required
-                placeholder="评论内容"
+                placeholder="Write your comment"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
               <button
                 type="submit"
                 className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
               >
-                提交评论
+                Post comment
               </button>
             </form>
           </div>

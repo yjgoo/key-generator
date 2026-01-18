@@ -20,18 +20,18 @@ export async function createPostAction(_: CreatePostState, formData: FormData): 
   const status = String(formData.get('status') || 'draft') as 'draft' | 'published';
 
   if (!title || !content) {
-    return { error: '标题和正文不能为空。' };
+    return { error: 'Title and content are required.' };
   }
 
   const baseSlug = slugifyText(String(formData.get('slug') || '') || title);
   if (!baseSlug) {
-    return { error: '无法生成有效的 slug。' };
+    return { error: 'Unable to generate a valid slug.' };
   }
 
-  const existing = await sql<{ id: string }>`SELECT id FROM posts WHERE slug = ${baseSlug} LIMIT 1;`;
-  const existingRows = getRows(existing);
+  const existing = await sql`SELECT id FROM posts WHERE slug = ${baseSlug} LIMIT 1;`;
+  const existingRows = getRows(existing) as { id: string }[];
   if (existingRows.length > 0) {
-    return { error: '该 slug 已存在，请修改后再提交。' };
+    return { error: 'That slug already exists. Please choose another.' };
   }
 
   const publishedAt = status === 'published' ? new Date().toISOString() : null;

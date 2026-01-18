@@ -13,12 +13,12 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
   const nextPath = String(formData.get('next') || '').trim();
 
   if (!email || !password) {
-    return { error: '请输入邮箱和密码。' };
+    return { error: 'Please enter your email and password.' };
   }
 
   const user = await authenticateAdmin(email, password);
   if (!user || user.role !== 'admin') {
-    return { error: '账号或密码错误。' };
+    return { error: 'Invalid email or password.' };
   }
 
   const token = await createSession({
