@@ -7,6 +7,32 @@ export interface KeyGenerator {
   defaultOptions?: Record<string, number | string | boolean>;
 }
 
+export interface PasswordOptions {
+  length: number;
+  includeUppercase: boolean;
+  includeLowercase: boolean;
+  includeNumbers: boolean;
+  includeSymbols: boolean;
+  excludeSimilar: boolean;
+  excludeAmbiguous: boolean;
+  noDuplicates: boolean;
+  startWithLetter: boolean;
+  customSymbols: string;
+}
+
+export const defaultPasswordOptions: PasswordOptions = {
+  length: 16,
+  includeUppercase: true,
+  includeLowercase: true,
+  includeNumbers: true,
+  includeSymbols: true,
+  excludeSimilar: true,
+  excludeAmbiguous: false,
+  noDuplicates: false,
+  startWithLetter: false,
+  customSymbols: '',
+};
+
 // Browser-compatible utility functions for key generation
 const generateRandomString = (length: number, charset: string): string => {
   let result = '';
@@ -28,6 +54,22 @@ const generateSecureRandom = (length: number): string => {
     }
   }
   return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+};
+
+const secureRandomInt = (max: number): number => {
+  if (max <= 0) return 0;
+  if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+    const array = new Uint32Array(1);
+    const maxUint32 = 0xffffffff;
+    const limit = Math.floor(maxUint32 / max) * max;
+    let value = 0;
+    do {
+      window.crypto.getRandomValues(array);
+      value = array[0];
+    } while (value >= limit);
+    return value % max;
+  }
+  return Math.floor(Math.random() * max);
 };
 
 const generateBase64Random = (length: number): string => {
@@ -55,6 +97,155 @@ const generateUUID = (): string => {
     const v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
+};
+
+const DEFAULT_SYMBOLS = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+const AMBIGUOUS_SYMBOLS = '{}[]()/\\\'"`~,;:.<>';
+const SIMILAR_CHARS = 'O0oIl1S5Z2B8G6';
+const UPPERCASE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const LOWERCASE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
+const NUMBER_CHARS = '0123456789';
+
+const uniqueChars = (input: string): string[] => Array.from(new Set(input.split('')));
+
+const filterChars = (chars: string[], excluded: Set<string>): string[] =>
+  chars.filter(char => !excluded.has(char));
+
+const buildPasswordCharsets = (options: PasswordOptions) => {
+  const similarSet = new Set(SIMILAR_CHARS.split(''));
+  const ambiguousSet = new Set(AMBIGUOUS_SYMBOLS.split(''));
+
+  let uppercase = uniqueChars(UPPERCASE_CHARS);
+  let lowercase = uniqueChars(LOWERCASE_CHARS);
+  let numbers = uniqueChars(NUMBER_CHARS);
+  const symbolsSource = options.customSymbols.trim().length > 0 ? options.customSymbols : DEFAULT_SYMBOLS;
+  let symbols = uniqueChars(symbolsSource);
+
+  if (options.excludeSimilar) {
+    uppercase = filterChars(uppercase, similarSet);
+    lowercase = filterChars(lowercase, similarSet);
+    numbers = filterChars(numbers, similarSet);
+    symbols = filterChars(symbols, similarSet);
+  }
+
+  if (options.excludeAmbiguous) {
+    symbols = filterChars(symbols, ambiguousSet);
+  }
+
+  const combined = uniqueChars(
+    (options.includeUppercase ? uppercase.join('') : '') +
+    (options.includeLowercase ? lowercase.join('') : '') +
+    (options.includeNumbers ? numbers.join('') : '') +
+    (options.includeSymbols ? symbols.join('') : '')
+  );
+
+  return { uppercase, lowercase, numbers, symbols, combined };
+};
+
+export const getPasswordCharsetInfo = (options: Partial<PasswordOptions>) => {
+  const merged = { ...defaultPasswordOptions, ...options };
+  const { uppercase, lowercase, numbers, symbols, combined } = buildPasswordCharsets(merged);
+  return {
+    charsetSize: combined.length,
+    letters: [...uppercase, ...lowercase],
+    uppercase,
+    lowercase,
+    numbers,
+    symbols,
+    combined,
+    options: merged,
+  };
+};
+
+const shuffleInPlace = (items: string[]): void => {
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = secureRandomInt(i + 1);
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+};
+
+export const generatePassword = (options: Partial<PasswordOptions> = {}): string => {
+  const merged = { ...defaultPasswordOptions, ...options };
+  const {
+    length,
+    includeUppercase,
+    includeLowercase,
+    includeNumbers,
+    includeSymbols,
+    noDuplicates,
+    startWithLetter,
+  } = merged;
+
+  const { uppercase, lowercase, numbers, symbols, combined } = buildPasswordCharsets(merged);
+
+  const selectedSets: { name: string; chars: string[] }[] = [];
+  if (includeUppercase) selectedSets.push({ name: 'uppercase', chars: uppercase });
+  if (includeLowercase) selectedSets.push({ name: 'lowercase', chars: lowercase });
+  if (includeNumbers) selectedSets.push({ name: 'numbers', chars: numbers });
+  if (includeSymbols) selectedSets.push({ name: 'symbols', chars: symbols });
+
+  if (selectedSets.length === 0) {
+    throw new Error('Select at least one character set.');
+  }
+
+  const emptySet = selectedSets.find(set => set.chars.length === 0);
+  if (emptySet) {
+    throw new Error(`The ${emptySet.name} set is empty after exclusions.`);
+  }
+
+  if (length < selectedSets.length) {
+    throw new Error(`Length must be at least ${selectedSets.length} to include all selected types.`);
+  }
+
+  if (noDuplicates && length > combined.length) {
+    throw new Error('Length exceeds the number of unique characters available.');
+  }
+
+  const availableSet = new Set(combined);
+  const pickFromSet = (chars: string[]): string => {
+    const pool = noDuplicates ? chars.filter(char => availableSet.has(char)) : chars;
+    if (pool.length === 0) {
+      throw new Error('No available characters after exclusions.');
+    }
+    const char = pool[secureRandomInt(pool.length)];
+    if (noDuplicates) {
+      availableSet.delete(char);
+    }
+    return char;
+  };
+
+  const passwordChars: string[] = [];
+
+  selectedSets.forEach(set => {
+    passwordChars.push(pickFromSet(set.chars));
+  });
+
+  while (passwordChars.length < length) {
+    const pool = noDuplicates ? Array.from(availableSet) : combined;
+    const char = pool[secureRandomInt(pool.length)];
+    if (noDuplicates) {
+      availableSet.delete(char);
+    }
+    passwordChars.push(char);
+  }
+
+  shuffleInPlace(passwordChars);
+
+  if (startWithLetter) {
+    const letters = new Set([...uppercase, ...lowercase]);
+    if (letters.size === 0) {
+      throw new Error('Enable uppercase or lowercase to start with a letter.');
+    }
+    const letterIndex = passwordChars.findIndex(char => letters.has(char));
+    if (letterIndex === -1) {
+      throw new Error('Unable to place a letter as the first character.');
+    }
+    if (letterIndex !== 0) {
+      [passwordChars[0], passwordChars[letterIndex]] = [passwordChars[letterIndex], passwordChars[0]];
+    }
+  }
+
+  return passwordChars.join('');
 };
 
 // Key generators configuration
@@ -155,8 +346,7 @@ export const generateKey = (id: string, options?: Record<string, number | string
       return prefix + key;
 
     case 'password':
-      const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
-      return generateRandomString(getNumberOption('length', 16), charset);
+      return generatePassword(options);
 
     case 'bcrypt':
       const rounds = getNumberOption('rounds', 10);

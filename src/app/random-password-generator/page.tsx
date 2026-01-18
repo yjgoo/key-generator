@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { GeneratorPage } from '@/components/GeneratorPage';
+import { RandomPasswordGeneratorClient } from '@/app/random-password-generator/client';
 import { getGenerator } from '@/lib/keyGenerators';
 import { generatePageTitle, generateMetaDescription } from '@/lib/utils';
 import { notFound } from 'next/navigation';
@@ -48,11 +48,5 @@ export default function RandomPasswordPage() {
     notFound();
   }
 
-  return (
-    <GeneratorPage
-      generator={generator}
-      seoDescription="Generate strong random passwords with mixed characters including uppercase, lowercase, numbers, and special symbols. Create secure passwords for accounts, applications, and services with customizable length."
-      pageUrl="https://key-generator.com/random-password-generator"
-    />
-  );
+  return <RandomPasswordGeneratorClient generator={generator} />;
 }
