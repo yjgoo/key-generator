@@ -25,6 +25,23 @@ export function Hero() {
     }
   };
 
+  const quickAccessLinks = [
+    ...keyGenerators.map((generator) => ({
+      id: generator.id,
+      title: generator.title,
+      href: getGeneratorPath(generator.id),
+    })),
+    { id: 'crypto-aes-encrypt', title: 'AES Encrypt', href: '/cryptography/aes/encryption' },
+    { id: 'crypto-aes-decrypt', title: 'AES Decrypt', href: '/cryptography/aes/decryption' },
+    { id: 'crypto-des-encrypt', title: 'DES Encrypt', href: '/cryptography/des/encryption' },
+    { id: 'crypto-des-decrypt', title: 'DES Decrypt', href: '/cryptography/des/decryption' },
+    { id: 'crypto-rsa-encrypt', title: 'RSA Encrypt', href: '/cryptography/rsa/encryption' },
+    { id: 'crypto-rsa-decrypt', title: 'RSA Decrypt', href: '/cryptography/rsa/decryption' },
+    { id: 'crypto-rsa-keys', title: 'RSA Keys', href: '/cryptography/rsa/key-generator' },
+    { id: 'crypto-rsa-sign', title: 'RSA Sign', href: '/cryptography/rsa/sign' },
+    { id: 'crypto-rsa-verify', title: 'RSA Verify', href: '/cryptography/rsa/verify' },
+  ];
+
   // Generate initial key on component mount
   useEffect(() => {
     generateNewKey();
@@ -95,14 +112,14 @@ export function Hero() {
         <div className="max-w-5xl mx-auto">
           <h3 className="text-lg font-semibold text-gray-800 mb-3">Quick Access</h3>
           <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-1.5">
-            {keyGenerators.map((generator) => (
+            {quickAccessLinks.map((item) => (
               <Link
-                key={generator.id}
-                href={getGeneratorPath(generator.id)}
+                key={item.id}
+                href={item.href}
                 className="group bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-md p-1.5 transition-all duration-200 text-center"
               >
                 <div className="text-xs font-medium text-gray-700 group-hover:text-blue-600 truncate">
-                  {generator.title
+                  {item.title
                     .replace(' Generator', '')
                     .replace('Random ', '')
                     .replace('Secure & Strong ', 'Secure ')
