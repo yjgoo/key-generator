@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import JSZip from 'jszip';
 import { CryptoPageShell } from '@/components/crypto/CryptoPageShell';
 import { CopyButton } from '@/components/crypto/CopyButton';
 import { exportKeyToPem } from '@/lib/cryptoUtils';
@@ -18,6 +19,39 @@ export default function RsaKeyGeneratorPage() {
 
   const rawPublicKey = toRawPem(publicKeyPem);
   const rawPrivateKey = toRawPem(privateKeyPem);
+
+  const downloadTextFile = (filename: string, content: string) => {
+    if (!content) {
+      return;
+    }
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadZip = async () => {
+    if (!publicKeyPem || !privateKeyPem) {
+      return;
+    }
+    const zip = new JSZip();
+    zip.file('public-key.pem', publicKeyPem);
+    zip.file('private-key.pem', privateKeyPem);
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'rsa-key-pair.zip';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
 
   const generateKeys = async () => {
     setError('');
@@ -102,6 +136,14 @@ export default function RsaKeyGeneratorPage() {
                   label="Copy Raw Public Key"
                   title="Copy raw public key (no headers or line breaks)"
                 />
+                <button
+                  type="button"
+                  onClick={() => downloadTextFile('public-key.pem', publicKeyPem)}
+                  disabled={!publicKeyPem}
+                  className="px-3 py-1.5 text-xs border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Download PEM
+                </button>
               </div>
             </div>
             <textarea
@@ -122,6 +164,14 @@ export default function RsaKeyGeneratorPage() {
                   label="Copy Raw Private Key"
                   title="Copy raw private key (no headers or line breaks)"
                 />
+                <button
+                  type="button"
+                  onClick={() => downloadTextFile('private-key.pem', privateKeyPem)}
+                  disabled={!privateKeyPem}
+                  className="px-3 py-1.5 text-xs border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Download PEM
+                </button>
               </div>
             </div>
             <textarea
@@ -131,6 +181,16 @@ export default function RsaKeyGeneratorPage() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 font-mono text-xs"
               placeholder="Your private key will appear here"
             />
+          </div>
+          <div className="flex">
+            <button
+              type="button"
+              onClick={downloadZip}
+              disabled={!publicKeyPem || !privateKeyPem}
+              className="px-4 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Download Key Pair (ZIP)
+            </button>
           </div>
         </div>
       </div>
