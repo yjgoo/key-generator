@@ -24,9 +24,9 @@ export async function ensureSchema() {
     return;
   }
 
-  await sql`
-    CREATE EXTENSION IF NOT EXISTS pgcrypto;
+  await sql`CREATE EXTENSION IF NOT EXISTS pgcrypto;`;
 
+  await sql`
     CREATE TABLE IF NOT EXISTS users (
       id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
       email text UNIQUE NOT NULL,
@@ -34,7 +34,9 @@ export async function ensureSchema() {
       role text NOT NULL DEFAULT 'admin',
       created_at timestamptz NOT NULL DEFAULT now()
     );
+  `;
 
+  await sql`
     CREATE TABLE IF NOT EXISTS posts (
       id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
       title text NOT NULL,
@@ -47,7 +49,9 @@ export async function ensureSchema() {
       updated_at timestamptz NOT NULL DEFAULT now(),
       published_at timestamptz
     );
+  `;
 
+  await sql`
     CREATE TABLE IF NOT EXISTS comments (
       id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
       post_id uuid NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
@@ -57,12 +61,12 @@ export async function ensureSchema() {
       content text NOT NULL,
       created_at timestamptz NOT NULL DEFAULT now()
     );
-
-    CREATE INDEX IF NOT EXISTS idx_posts_status_created_at ON posts(status, created_at DESC);
-    CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);
-    CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id);
-    CREATE INDEX IF NOT EXISTS idx_comments_parent_id ON comments(parent_id);
   `;
+
+  await sql`CREATE INDEX IF NOT EXISTS idx_posts_status_created_at ON posts(status, created_at DESC);`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id);`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_comments_parent_id ON comments(parent_id);`;
 
   schemaReady = true;
 }

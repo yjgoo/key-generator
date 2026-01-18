@@ -32,7 +32,7 @@ export default async function PostsPage() {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-10">
           <h1 className="text-4xl font-bold text-gray-900">Articles</h1>
-          <p className="text-gray-600 mt-2">关于安全密钥与产品更新的文章。</p>
+          <p className="text-gray-600 mt-2">Security key insights and product updates.</p>
         </div>
 
         <div className="grid gap-6">
@@ -53,7 +53,7 @@ export default async function PostsPage() {
           ))}
           {posts.length === 0 && (
             <div className="rounded-xl border border-dashed border-gray-300 bg-white p-8 text-center text-gray-500">
-              还没有文章发布，稍后再来看看吧。
+              No articles yet. Check back soon.
             </div>
           )}
         </div>
