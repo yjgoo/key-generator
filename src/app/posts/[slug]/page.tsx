@@ -134,10 +134,13 @@ export default async function PostDetailPage({ params }: PageProps) {
       <Header />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <article className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-          <div className="text-sm text-gray-500">
-            {post.published_at
-              ? new Date(post.published_at).toLocaleDateString()
-              : new Date(post.created_at).toLocaleDateString()}
+          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+            <span>
+              {post.published_at
+                ? new Date(post.published_at).toLocaleDateString()
+                : new Date(post.created_at).toLocaleDateString()}
+            </span>
+            {post.author_name && <span>• By {post.author_name}</span>}
           </div>
           <h1 className="mt-2 text-3xl font-bold text-gray-900">{post.title}</h1>
           {post.excerpt && <p className="mt-3 text-gray-600">{post.excerpt}</p>}

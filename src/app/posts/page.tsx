@@ -42,10 +42,13 @@ export default async function PostsPage() {
               href={`/posts/${post.slug}`}
               className="block rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition hover:shadow-md"
             >
-              <div className="text-sm text-gray-500">
-                {post.published_at
-                  ? new Date(post.published_at).toLocaleDateString()
-                  : new Date(post.created_at).toLocaleDateString()}
+              <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+                <span>
+                  {post.published_at
+                    ? new Date(post.published_at).toLocaleDateString()
+                    : new Date(post.created_at).toLocaleDateString()}
+                </span>
+                {post.author_name && <span>• By {post.author_name}</span>}
               </div>
               <h2 className="mt-2 text-2xl font-semibold text-gray-900">{post.title}</h2>
               {post.excerpt && <p className="mt-3 text-gray-600">{post.excerpt}</p>}

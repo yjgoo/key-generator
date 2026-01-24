@@ -31,10 +31,17 @@ export async function ensureSchema() {
       id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
       email text UNIQUE NOT NULL,
       password_hash text NOT NULL,
+      name text,
+      bio text,
+      avatar_url text,
       role text NOT NULL DEFAULT 'admin',
       created_at timestamptz NOT NULL DEFAULT now()
     );
   `;
+
+  await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS name text;`;
+  await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS bio text;`;
+  await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url text;`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS posts (

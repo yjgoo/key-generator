@@ -10,6 +10,7 @@ export interface PostSummary {
   status: PostStatus;
   created_at: string;
   published_at: string | null;
+  author_name: string | null;
 }
 
 export interface PostDetail extends PostSummary {
@@ -40,8 +41,17 @@ export interface RelatedToolItem {
 export async function listPublishedPosts() {
   await ensureSchema();
   const result = await sql`
-    SELECT id, title, slug, excerpt, status, created_at, published_at
+    SELECT
+      posts.id,
+      posts.title,
+      posts.slug,
+      posts.excerpt,
+      posts.status,
+      posts.created_at,
+      posts.published_at,
+      COALESCE(users.name, users.email) AS author_name
     FROM posts
+    LEFT JOIN users ON posts.author_id = users.id
     WHERE status = 'published'
     ORDER BY published_at DESC NULLS LAST, created_at DESC;
   `;
@@ -52,8 +62,17 @@ export async function listPublishedPosts() {
 export async function listAllPosts() {
   await ensureSchema();
   const result = await sql`
-    SELECT id, title, slug, excerpt, status, created_at, published_at
+    SELECT
+      posts.id,
+      posts.title,
+      posts.slug,
+      posts.excerpt,
+      posts.status,
+      posts.created_at,
+      posts.published_at,
+      COALESCE(users.name, users.email) AS author_name
     FROM posts
+    LEFT JOIN users ON posts.author_id = users.id
     ORDER BY created_at DESC;
   `;
 
@@ -63,8 +82,19 @@ export async function listAllPosts() {
 export async function getPostBySlug(slug: string) {
   await ensureSchema();
   const result = await sql`
-    SELECT id, title, slug, excerpt, content, status, created_at, updated_at, published_at
+    SELECT
+      posts.id,
+      posts.title,
+      posts.slug,
+      posts.excerpt,
+      posts.content,
+      posts.status,
+      posts.created_at,
+      posts.updated_at,
+      posts.published_at,
+      COALESCE(users.name, users.email) AS author_name
     FROM posts
+    LEFT JOIN users ON posts.author_id = users.id
     WHERE slug = ${slug}
     LIMIT 1;
   `;
@@ -75,8 +105,19 @@ export async function getPostBySlug(slug: string) {
 export async function getPublishedPostBySlug(slug: string) {
   await ensureSchema();
   const result = await sql`
-    SELECT id, title, slug, excerpt, content, status, created_at, updated_at, published_at
+    SELECT
+      posts.id,
+      posts.title,
+      posts.slug,
+      posts.excerpt,
+      posts.content,
+      posts.status,
+      posts.created_at,
+      posts.updated_at,
+      posts.published_at,
+      COALESCE(users.name, users.email) AS author_name
     FROM posts
+    LEFT JOIN users ON posts.author_id = users.id
     WHERE slug = ${slug} AND status = 'published'
     LIMIT 1;
   `;

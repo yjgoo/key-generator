@@ -11,7 +11,7 @@ export type CreatePostState = {
 };
 
 export async function createPostAction(_: CreatePostState, formData: FormData): Promise<CreatePostState> {
-  await requireAdmin();
+  const session = await requireAdmin();
   await ensureSchema();
 
   const title = String(formData.get('title') || '').trim();
@@ -38,8 +38,8 @@ export async function createPostAction(_: CreatePostState, formData: FormData): 
   const publishedAt = status === 'published' ? new Date().toISOString() : null;
 
   const insertResult = await sql`
-    INSERT INTO posts (title, slug, excerpt, content, status, published_at)
-    VALUES (${title}, ${baseSlug}, ${excerpt || null}, ${content}, ${status}, ${publishedAt})
+    INSERT INTO posts (title, slug, excerpt, content, status, published_at, author_id)
+    VALUES (${title}, ${baseSlug}, ${excerpt || null}, ${content}, ${status}, ${publishedAt}, ${session.sub})
     RETURNING id;
   `;
 
