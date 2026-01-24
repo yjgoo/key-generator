@@ -98,6 +98,24 @@ export async function ensureSchema() {
     );
   `;
 
+  await sql`
+    CREATE TABLE IF NOT EXISTS tags (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      name text UNIQUE NOT NULL,
+      slug text UNIQUE NOT NULL,
+      created_at timestamptz NOT NULL DEFAULT now()
+    );
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS post_tags (
+      post_id uuid NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+      tag_id uuid NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
+      created_at timestamptz NOT NULL DEFAULT now(),
+      PRIMARY KEY (post_id, tag_id)
+    );
+  `;
+
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_status_created_at ON posts(status, created_at DESC);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_category_id ON posts(category_id);`;
@@ -105,6 +123,9 @@ export async function ensureSchema() {
   await sql`CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_comments_parent_id ON comments(parent_id);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_post_related_tools_post_id ON post_related_tools(post_id);`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_tags_slug ON tags(slug);`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_post_tags_post_id ON post_tags(post_id);`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_post_tags_tag_id ON post_tags(tag_id);`;
 
   schemaReady = true;
 }

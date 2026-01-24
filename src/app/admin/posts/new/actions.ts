@@ -20,6 +20,7 @@ export async function createPostAction(_: CreatePostState, formData: FormData): 
   const summary = String(formData.get('summary') || '').trim();
   const categoryName = String(formData.get('category') || '').trim();
   const coverImageUrl = String(formData.get('coverImageUrl') || '').trim();
+  const tagsInput = String(formData.get('tags') || '').trim();
   const status = String(formData.get('status') || 'draft') as 'draft' | 'published';
   const relatedToolsRaw = String(formData.get('relatedTools') || '[]');
 
@@ -72,6 +73,42 @@ export async function createPostAction(_: CreatePostState, formData: FormData): 
   `;
 
   const postId = (getRows(insertResult) as { id: string }[])[0]?.id;
+
+  const tagNames = tagsInput
+    ? Array.from(
+        new Set(
+          tagsInput
+            .split(',')
+            .map((tag) => tag.trim())
+            .filter(Boolean),
+        ),
+      )
+    : [];
+
+  if (postId && tagNames.length > 0) {
+    for (const tagName of tagNames) {
+      const tagSlug = slugifyText(tagName);
+      if (!tagSlug) {
+        continue;
+      }
+
+      const tagResult = await sql`
+        INSERT INTO tags (name, slug)
+        VALUES (${tagName}, ${tagSlug})
+        ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name
+        RETURNING id;
+      `;
+      const tagId = (getRows(tagResult) as { id: string }[])[0]?.id;
+      if (!tagId) {
+        continue;
+      }
+      await sql`
+        INSERT INTO post_tags (post_id, tag_id)
+        VALUES (${postId}, ${tagId})
+        ON CONFLICT DO NOTHING;
+      `;
+    }
+  }
 
   let relatedTools: Array<{ title: string; description?: string; url: string }> = [];
   try {

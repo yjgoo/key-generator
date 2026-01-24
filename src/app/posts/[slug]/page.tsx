@@ -7,7 +7,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { addCommentAction } from './actions';
-import { getPublishedPostBySlug, listComments, listRelatedTools } from '@/lib/posts';
+import { getPublishedPostBySlug, listComments, listRelatedPostsByTags, listRelatedTools } from '@/lib/posts';
 
 export const dynamic = 'force-dynamic';
 
@@ -197,9 +197,10 @@ export default async function PostDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const [comments, relatedTools] = await Promise.all([
+  const [comments, relatedTools, relatedPosts] = await Promise.all([
     listComments(post.id),
     listRelatedTools(post.id),
+    listRelatedPostsByTags(post.id),
   ]);
   const grouped = new Map<string | null, typeof comments>();
 
@@ -281,6 +282,16 @@ export default async function PostDetailPage({ params }: PageProps) {
                 {post.category_name}
               </span>
             )}
+            {post.tags.length > 0 &&
+              post.tags.map((tag) => (
+                <a
+                  key={tag.id}
+                  href={`/posts?tag=${encodeURIComponent(tag.slug)}`}
+                  className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600 hover:bg-gray-200"
+                >
+                  #{tag.name}
+                </a>
+              ))}
             <span>
               {post.published_at
                 ? new Date(post.published_at).toLocaleDateString()
@@ -330,6 +341,54 @@ export default async function PostDetailPage({ params }: PageProps) {
                   </li>
                 ))}
               </ul>
+            </div>
+          </section>
+        )}
+
+        {relatedPosts.length > 0 && (
+          <section className="mt-10" aria-labelledby="related-posts-title">
+            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+              <h2 id="related-posts-title" className="text-2xl font-semibold text-gray-900">
+                Related Articles
+              </h2>
+              <p className="mt-2 text-gray-600">
+                Posts with overlapping tags you might find helpful.
+              </p>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {relatedPosts.map((related) => (
+                  <a
+                    key={related.id}
+                    href={`/posts/${related.slug}`}
+                    className="rounded-lg border border-gray-200 p-4 hover:border-blue-200 hover:shadow-sm"
+                  >
+                    <div className="text-xs text-gray-500">
+                      {related.published_at
+                        ? new Date(related.published_at).toLocaleDateString()
+                        : new Date(related.created_at).toLocaleDateString()}
+                    </div>
+                    <h3 className="mt-1 text-lg font-semibold text-gray-900">
+                      {related.title}
+                    </h3>
+                    {(related.summary || related.excerpt) && (
+                      <p className="mt-2 text-sm text-gray-600">
+                        {related.summary || related.excerpt}
+                      </p>
+                    )}
+                    {related.tags.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {related.tags.slice(0, 4).map((tag) => (
+                          <span
+                            key={tag.id}
+                            className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-600"
+                          >
+                            #{tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </a>
+                ))}
+              </div>
             </div>
           </section>
         )}

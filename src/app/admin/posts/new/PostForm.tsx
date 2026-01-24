@@ -85,6 +85,17 @@ export function PostForm() {
       </div>
 
       <div>
+        <label className="block text-sm font-medium text-gray-700">Tags (optional)</label>
+        <input
+          type="text"
+          name="tags"
+          className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          placeholder="e.g. security, jwt, best practices"
+        />
+        <p className="mt-1 text-xs text-gray-500">Use comma-separated tags for filtering and recommendations.</p>
+      </div>
+
+      <div>
         <label className="block text-sm font-medium text-gray-700">Cover image URL (optional)</label>
         <input
           type="url"
