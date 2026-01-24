@@ -26,11 +26,12 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 type PostsPageProps = {
-  searchParams?: { category?: string | string[] };
+  searchParams?: Promise<{ category?: string | string[] }>;
 };
 
 export default async function PostsPage({ searchParams }: PostsPageProps) {
-  const rawCategory = searchParams?.category;
+  const params = await searchParams;
+  const rawCategory = params?.category;
   const activeCategory = Array.isArray(rawCategory)
     ? (rawCategory[0] || '').trim()
     : (rawCategory || '').trim();
