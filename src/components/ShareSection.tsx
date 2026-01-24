@@ -20,27 +20,6 @@ export function ShareSection({ title, url }: ShareSectionProps) {
     }
   };
 
-  const handleInstagramShare = async () => {
-    try {
-      if (navigator.share) {
-        await navigator.share({ title, url });
-        return;
-      }
-    } catch {
-      // Ignore share errors and fallback to copy.
-    }
-
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Ignore clipboard errors.
-    }
-
-    window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer');
-  };
-
   return (
     <section aria-labelledby="share-title">
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
@@ -78,14 +57,6 @@ export function ShareSection({ title, url }: ShareSectionProps) {
           >
             X
           </a>
-          <button
-            type="button"
-            onClick={handleInstagramShare}
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-700 hover:border-pink-200 hover:text-pink-600"
-            aria-label="Share on Instagram"
-          >
-            Instagram
-          </button>
           <a
             href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`}
             target="_blank"
