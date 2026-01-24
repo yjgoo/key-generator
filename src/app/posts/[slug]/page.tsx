@@ -274,172 +274,178 @@ export default async function PostDetailPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
       <Header />
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <article className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
-            {post.category_name && (
-              <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700">
-                {post.category_name}
-              </span>
-            )}
-            {post.tags.length > 0 &&
-              post.tags.map((tag) => (
-                <a
-                  key={tag.id}
-                  href={`/posts?tag=${encodeURIComponent(tag.slug)}`}
-                  className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600 hover:bg-gray-200"
-                >
-                  #{tag.name}
-                </a>
-              ))}
-            <span>
-              {post.published_at
-                ? new Date(post.published_at).toLocaleDateString()
-                : new Date(post.created_at).toLocaleDateString()}
-            </span>
-            {post.author_name && <span>• By {post.author_name}</span>}
-          </div>
-          <h1 className="mt-2 text-3xl font-bold text-gray-900">{post.title}</h1>
-          {post.excerpt && <p className="mt-3 text-gray-600">{post.excerpt}</p>}
-          {post.cover_image_url && (
-            <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
-              <Image
-                src={post.cover_image_url}
-                alt={`${post.title} cover image`}
-                width={1200}
-                height={630}
-                sizes="(max-width: 768px) 100vw, 768px"
-                className="h-auto w-full object-cover"
-                unoptimized
-              />
-            </div>
-          )}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="space-y-10">
+            <article className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+              <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+                {post.category_name && (
+                  <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700">
+                    {post.category_name}
+                  </span>
+                )}
+                {post.tags.length > 0 &&
+                  post.tags.map((tag) => (
+                    <a
+                      key={tag.id}
+                      href={`/posts?tag=${encodeURIComponent(tag.slug)}`}
+                      className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600 hover:bg-gray-200"
+                    >
+                      #{tag.name}
+                    </a>
+                  ))}
+                <span>
+                  {post.published_at
+                    ? new Date(post.published_at).toLocaleDateString()
+                    : new Date(post.created_at).toLocaleDateString()}
+                </span>
+                {post.author_name && <span>• By {post.author_name}</span>}
+              </div>
+              <h1 className="mt-2 text-3xl font-bold text-gray-900">{post.title}</h1>
+              {post.excerpt && <p className="mt-3 text-gray-600">{post.excerpt}</p>}
+              {post.cover_image_url && (
+                <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
+                  <Image
+                    src={post.cover_image_url}
+                    alt={`${post.title} cover image`}
+                    width={1200}
+                    height={630}
+                    sizes="(max-width: 768px) 100vw, 768px"
+                    className="h-auto w-full object-cover"
+                    unoptimized
+                  />
+                </div>
+              )}
 
-          <div className="mt-6">{renderContent(post.content)}</div>
-        </article>
+              <div className="mt-6">{renderContent(post.content)}</div>
+            </article>
 
-        {relatedTools.length > 0 && (
-          <section className="mt-10" aria-labelledby="related-tools-title">
-            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h2 id="related-tools-title" className="text-2xl font-semibold text-gray-900">
-                Related Tools
-              </h2>
-              <p className="mt-2 text-gray-600">
-                Helpful key generators mentioned in this article.
-              </p>
-              <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-                {relatedTools.map((tool) => (
-                  <li key={tool.id} className="rounded-lg border border-gray-200 p-4">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      <a href={tool.url} className="hover:text-blue-600">
-                        {tool.title}
-                      </a>
-                    </h3>
-                    {tool.description && (
-                      <p className="mt-2 text-sm text-gray-600">{tool.description}</p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        )}
+            <section>
+              <h2 className="text-2xl font-semibold text-gray-900">Comments & Replies</h2>
+              <div className="mt-6 space-y-6">
+                {renderComments(null)}
+                {comments.length === 0 && (
+                  <div className="rounded-lg border border-dashed border-gray-300 bg-white p-6 text-center text-gray-500">
+                    No comments yet. Be the first to comment.
+                  </div>
+                )}
+              </div>
 
-        {relatedPosts.length > 0 && (
-          <section className="mt-10" aria-labelledby="related-posts-title">
-            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h2 id="related-posts-title" className="text-2xl font-semibold text-gray-900">
-                Related Articles
-              </h2>
-              <p className="mt-2 text-gray-600">
-                Posts with overlapping tags you might find helpful.
-              </p>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                {relatedPosts.map((related) => (
-                  <a
-                    key={related.id}
-                    href={`/posts/${related.slug}`}
-                    className="rounded-lg border border-gray-200 p-4 hover:border-blue-200 hover:shadow-sm"
+              <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-900">Leave a comment</h3>
+                <form action={addCommentAction} className="mt-4 space-y-4">
+                  <input type="hidden" name="postId" value={post.id} />
+                  <input type="hidden" name="slug" value={post.slug} />
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <input
+                      type="text"
+                      name="authorName"
+                      placeholder="Your name"
+                      required
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                    <input
+                      type="email"
+                      name="authorEmail"
+                      placeholder="Email (optional)"
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                  </div>
+                  <textarea
+                    name="content"
+                    rows={4}
+                    required
+                    placeholder="Write your comment"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
                   >
-                    <div className="text-xs text-gray-500">
-                      {related.published_at
-                        ? new Date(related.published_at).toLocaleDateString()
-                        : new Date(related.created_at).toLocaleDateString()}
-                    </div>
-                    <h3 className="mt-1 text-lg font-semibold text-gray-900">
-                      {related.title}
-                    </h3>
-                    {(related.summary || related.excerpt) && (
-                      <p className="mt-2 text-sm text-gray-600">
-                        {related.summary || related.excerpt}
-                      </p>
-                    )}
-                    {related.tags.length > 0 && (
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {related.tags.slice(0, 4).map((tag) => (
-                          <span
-                            key={tag.id}
-                            className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-600"
-                          >
-                            #{tag.name}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </a>
-                ))}
+                    Post comment
+                  </button>
+                </form>
               </div>
-            </div>
-          </section>
-        )}
+            </section>
+          </div>
 
-        <section className="mt-10">
-          <h2 className="text-2xl font-semibold text-gray-900">Comments & Replies</h2>
-          <div className="mt-6 space-y-6">
-            {renderComments(null)}
-            {comments.length === 0 && (
-              <div className="rounded-lg border border-dashed border-gray-300 bg-white p-6 text-center text-gray-500">
-                No comments yet. Be the first to comment.
-              </div>
+          <aside className="space-y-6 lg:sticky lg:top-24 h-fit">
+            {relatedTools.length > 0 && (
+              <section aria-labelledby="related-tools-title">
+                <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                  <h2 id="related-tools-title" className="text-xl font-semibold text-gray-900">
+                    Related Tools
+                  </h2>
+                  <p className="mt-2 text-sm text-gray-600">
+                    Helpful key generators mentioned in this article.
+                  </p>
+                  <ul className="mt-4 space-y-3">
+                    {relatedTools.map((tool) => (
+                      <li key={tool.id} className="rounded-lg border border-gray-200 p-3">
+                        <h3 className="text-sm font-semibold text-gray-900">
+                          <a href={tool.url} className="hover:text-blue-600">
+                            {tool.title}
+                          </a>
+                        </h3>
+                        {tool.description && (
+                          <p className="mt-2 text-xs text-gray-600">{tool.description}</p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </section>
             )}
-          </div>
 
-          <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-900">Leave a comment</h3>
-            <form action={addCommentAction} className="mt-4 space-y-4">
-              <input type="hidden" name="postId" value={post.id} />
-              <input type="hidden" name="slug" value={post.slug} />
-              <div className="grid gap-4 sm:grid-cols-2">
-                <input
-                  type="text"
-                  name="authorName"
-                  placeholder="Your name"
-                  required
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-                <input
-                  type="email"
-                  name="authorEmail"
-                  placeholder="Email (optional)"
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-              <textarea
-                name="content"
-                rows={4}
-                required
-                placeholder="Write your comment"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              />
-              <button
-                type="submit"
-                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-              >
-                Post comment
-              </button>
-            </form>
-          </div>
-        </section>
+            {relatedPosts.length > 0 && (
+              <section aria-labelledby="related-posts-title">
+                <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                  <h2 id="related-posts-title" className="text-xl font-semibold text-gray-900">
+                    Related Articles
+                  </h2>
+                  <p className="mt-2 text-sm text-gray-600">
+                    Posts with overlapping tags you might find helpful.
+                  </p>
+                  <div className="mt-4 space-y-3">
+                    {relatedPosts.map((related) => (
+                      <a
+                        key={related.id}
+                        href={`/posts/${related.slug}`}
+                        className="block rounded-lg border border-gray-200 p-3 hover:border-blue-200 hover:shadow-sm"
+                      >
+                        <div className="text-xs text-gray-500">
+                          {related.published_at
+                            ? new Date(related.published_at).toLocaleDateString()
+                            : new Date(related.created_at).toLocaleDateString()}
+                        </div>
+                        <h3 className="mt-1 text-sm font-semibold text-gray-900">
+                          {related.title}
+                        </h3>
+                        {(related.summary || related.excerpt) && (
+                          <p className="mt-2 text-xs text-gray-600">
+                            {related.summary || related.excerpt}
+                          </p>
+                        )}
+                        {related.tags.length > 0 && (
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {related.tags.slice(0, 4).map((tag) => (
+                              <span
+                                key={tag.id}
+                                className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-600"
+                              >
+                                #{tag.name}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )}
+          </aside>
+        </div>
       </main>
       <Footer />
     </div>
