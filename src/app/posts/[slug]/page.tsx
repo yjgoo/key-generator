@@ -20,6 +20,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  const coverImageUrl = post.cover_image_url || undefined;
+
   return {
     title: `${post.title} - Key Generator`,
     description: post.excerpt || post.title,
@@ -28,11 +30,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: post.excerpt || post.title,
       type: 'article',
       url: `https://key-generator.com/posts/${post.slug}`,
+      images: coverImageUrl ? [{ url: coverImageUrl }] : undefined,
     },
     twitter: {
-      card: 'summary',
+      card: coverImageUrl ? 'summary_large_image' : 'summary',
       title: post.title,
       description: post.excerpt || post.title,
+      images: coverImageUrl ? [coverImageUrl] : undefined,
     },
     alternates: {
       canonical: `https://key-generator.com/posts/${post.slug}`,
@@ -144,6 +148,16 @@ export default async function PostDetailPage({ params }: PageProps) {
           </div>
           <h1 className="mt-2 text-3xl font-bold text-gray-900">{post.title}</h1>
           {post.excerpt && <p className="mt-3 text-gray-600">{post.excerpt}</p>}
+          {post.cover_image_url && (
+            <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
+              <img
+                src={post.cover_image_url}
+                alt={`${post.title} cover image`}
+                className="h-auto w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          )}
 
           <div className="mt-6">{renderContent(post.content)}</div>
         </article>

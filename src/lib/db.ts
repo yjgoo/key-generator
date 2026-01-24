@@ -49,6 +49,7 @@ export async function ensureSchema() {
       title text NOT NULL,
       slug text UNIQUE NOT NULL,
       excerpt text,
+      cover_image_url text,
       content text NOT NULL,
       status text NOT NULL DEFAULT 'draft',
       author_id uuid REFERENCES users(id) ON DELETE SET NULL,
@@ -57,6 +58,8 @@ export async function ensureSchema() {
       published_at timestamptz
     );
   `;
+
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS cover_image_url text;`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS comments (
