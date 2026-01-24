@@ -114,6 +114,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                     fill
                     sizes="(max-width: 768px) 100vw, 768px"
                     className="object-cover"
+                    unoptimized
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
                   <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">

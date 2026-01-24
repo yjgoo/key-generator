@@ -299,6 +299,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                 height={630}
                 sizes="(max-width: 768px) 100vw, 768px"
                 className="h-auto w-full object-cover"
+                unoptimized
               />
             </div>
           )}
