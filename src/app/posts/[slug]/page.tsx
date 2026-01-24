@@ -1,11 +1,13 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeSanitize from 'rehype-sanitize';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ShareSection } from '@/components/ShareSection';
 import { addCommentAction } from './actions';
 import { getPublishedPostBySlug, listComments, listRelatedPostsByTags, listRelatedTools } from '@/lib/posts';
 
@@ -202,6 +204,7 @@ export default async function PostDetailPage({ params }: PageProps) {
     listRelatedTools(post.id),
     listRelatedPostsByTags(post.id),
   ]);
+  const shareUrl = `https://key-generator.com/posts/${post.slug}`;
   const grouped = new Map<string | null, typeof comments>();
 
   comments.forEach((comment) => {
@@ -275,6 +278,38 @@ export default async function PostDetailPage({ params }: PageProps) {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
       <Header />
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <nav aria-label="Breadcrumb" className="mb-6 text-xs text-gray-500">
+          <ol className="flex flex-wrap items-center gap-2">
+            <li>
+              <Link href="/" className="hover:text-gray-700">
+                Home
+              </Link>
+            </li>
+            <li className="text-gray-400">/</li>
+            <li>
+              <Link href="/posts" className="hover:text-gray-700">
+                Articles
+              </Link>
+            </li>
+            {post.category_name && (
+              <>
+                <li className="text-gray-400">/</li>
+                <li>
+                  <Link
+                    href={`/posts?category=${encodeURIComponent(post.category_slug || '')}`}
+                    className="hover:text-gray-700"
+                  >
+                    {post.category_name}
+                  </Link>
+                </li>
+              </>
+            )}
+            <li className="text-gray-400">/</li>
+            <li className="text-gray-700 line-clamp-1" aria-current="page">
+              {post.title}
+            </li>
+          </ol>
+        </nav>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="space-y-10">
             <article className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
@@ -370,6 +405,7 @@ export default async function PostDetailPage({ params }: PageProps) {
           </div>
 
           <aside className="space-y-6 lg:sticky lg:top-24 h-fit">
+            <ShareSection title={post.title} url={shareUrl} />
             {relatedTools.length > 0 && (
               <section aria-labelledby="related-tools-title">
                 <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
