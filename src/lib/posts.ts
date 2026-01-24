@@ -43,7 +43,14 @@ export interface RelatedToolItem {
   created_at: string;
 }
 
-export async function listPublishedPosts() {
+export interface CategorySummary {
+  id: string;
+  name: string;
+  slug: string;
+  post_count: number;
+}
+
+export async function listPublishedPosts(categorySlug?: string) {
   await ensureSchema();
   const result = await sql`
     SELECT
@@ -52,9 +59,9 @@ export async function listPublishedPosts() {
       posts.slug,
       posts.excerpt,
       posts.summary,
-        posts.category_id,
-        categories.name as category_name,
-        categories.slug as category_slug,
+      posts.category_id,
+      categories.name as category_name,
+      categories.slug as category_slug,
       posts.cover_image_url,
       posts.status,
       posts.created_at,
@@ -63,11 +70,39 @@ export async function listPublishedPosts() {
     FROM posts
     LEFT JOIN users ON posts.author_id = users.id
     LEFT JOIN categories ON posts.category_id = categories.id
-    WHERE status = 'published'
+    WHERE posts.status = 'published'
+      AND (${categorySlug || null}::text IS NULL OR categories.slug = ${categorySlug || null})
     ORDER BY published_at DESC NULLS LAST, created_at DESC;
   `;
 
   return getRows(result) as PostSummary[];
+}
+
+export async function listPublishedCategories() {
+  await ensureSchema();
+  const result = await sql`
+    SELECT
+      categories.id,
+      categories.name,
+      categories.slug,
+      COUNT(posts.id) as post_count
+    FROM categories
+    LEFT JOIN posts
+      ON posts.category_id = categories.id
+      AND posts.status = 'published'
+    GROUP BY categories.id, categories.name, categories.slug
+    HAVING COUNT(posts.id) > 0
+    ORDER BY categories.name ASC;
+  `;
+
+  return (getRows(result) as Array<{ id: string; name: string; slug: string; post_count: string }>).map(
+    (row) => ({
+      id: row.id,
+      name: row.name,
+      slug: row.slug,
+      post_count: Number(row.post_count),
+    }),
+  ) as CategorySummary[];
 }
 
 export async function listAllPosts() {
@@ -118,7 +153,7 @@ export async function getPostBySlug(slug: string) {
     FROM posts
     LEFT JOIN users ON posts.author_id = users.id
     LEFT JOIN categories ON posts.category_id = categories.id
-    WHERE slug = ${slug}
+    WHERE posts.slug = ${slug}
     LIMIT 1;
   `;
 
@@ -147,7 +182,7 @@ export async function getPublishedPostBySlug(slug: string) {
     FROM posts
     LEFT JOIN users ON posts.author_id = users.id
     LEFT JOIN categories ON posts.category_id = categories.id
-    WHERE slug = ${slug} AND status = 'published'
+    WHERE posts.slug = ${slug} AND posts.status = 'published'
     LIMIT 1;
   `;
 

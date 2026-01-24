@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { listPublishedPosts } from '@/lib/posts';
+import { listPublishedCategories, listPublishedPosts } from '@/lib/posts';
 
 export const metadata: Metadata = {
   title: 'Articles - Key Generator',
@@ -25,15 +25,76 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default async function PostsPage() {
-  const posts = await listPublishedPosts();
+type PostsPageProps = {
+  searchParams?: { category?: string | string[] };
+};
+
+export default async function PostsPage({ searchParams }: PostsPageProps) {
+  const rawCategory = searchParams?.category;
+  const activeCategory = Array.isArray(rawCategory)
+    ? (rawCategory[0] || '').trim()
+    : (rawCategory || '').trim();
+  const [posts, categories] = await Promise.all([
+    listPublishedPosts(activeCategory || undefined),
+    listPublishedCategories(),
+  ]);
+  const activeCategoryName =
+    categories.find((category) => category.slug === activeCategory)?.name || activeCategory;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
       <Header />
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-10">
-          <h1 className="text-4xl font-bold text-gray-900">Articles</h1>
+        <div className="mb-8 flex flex-col gap-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900">Articles</h1>
+              <p className="mt-2 text-sm text-gray-600">
+                Browse security tips, key management guides, and product updates.
+              </p>
+            </div>
+            {activeCategory && (
+              <div className="text-sm text-gray-500">
+                Filtering by <span className="font-semibold text-gray-800">{activeCategoryName}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/posts"
+              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-semibold transition ${
+                activeCategory
+                  ? 'border-gray-300 text-gray-600 hover:border-gray-400'
+                  : 'border-blue-600 bg-blue-600 text-white'
+              }`}
+            >
+              All
+            </Link>
+            {categories.map((category) => {
+              const isActive = activeCategory === category.slug;
+              return (
+                <Link
+                  key={category.id}
+                  href={`/posts?category=${encodeURIComponent(category.slug)}`}
+                  className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-semibold transition ${
+                    isActive
+                      ? 'border-blue-600 bg-blue-600 text-white'
+                      : 'border-gray-300 text-gray-600 hover:border-gray-400'
+                  }`}
+                >
+                  {category.name}
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+                      isActive ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-600'
+                    }`}
+                  >
+                    {category.post_count}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
 
         <div className="grid gap-6">
@@ -99,7 +160,7 @@ export default async function PostsPage() {
           ))}
           {posts.length === 0 && (
             <div className="rounded-xl border border-dashed border-gray-300 bg-white p-8 text-center text-gray-500">
-              No articles yet. Check back soon.
+              No articles found for this category.
             </div>
           )}
         </div>
