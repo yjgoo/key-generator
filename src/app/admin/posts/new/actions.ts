@@ -17,6 +17,7 @@ export async function createPostAction(_: CreatePostState, formData: FormData): 
   const title = String(formData.get('title') || '').trim();
   const content = String(formData.get('content') || '').trim();
   const excerpt = String(formData.get('excerpt') || '').trim();
+  const summary = String(formData.get('summary') || '').trim();
   const coverImageUrl = String(formData.get('coverImageUrl') || '').trim();
   const status = String(formData.get('status') || 'draft') as 'draft' | 'published';
   const relatedToolsRaw = String(formData.get('relatedTools') || '[]');
@@ -39,11 +40,12 @@ export async function createPostAction(_: CreatePostState, formData: FormData): 
   const publishedAt = status === 'published' ? new Date().toISOString() : null;
 
   const insertResult = await sql`
-    INSERT INTO posts (title, slug, excerpt, cover_image_url, content, status, published_at, author_id)
+    INSERT INTO posts (title, slug, excerpt, summary, cover_image_url, content, status, published_at, author_id)
     VALUES (
       ${title},
       ${baseSlug},
       ${excerpt || null},
+      ${summary || null},
       ${coverImageUrl || null},
       ${content},
       ${status},

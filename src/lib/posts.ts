@@ -7,6 +7,7 @@ export interface PostSummary {
   title: string;
   slug: string;
   excerpt: string | null;
+  summary: string | null;
   cover_image_url: string | null;
   status: PostStatus;
   created_at: string;
@@ -47,6 +48,7 @@ export async function listPublishedPosts() {
       posts.title,
       posts.slug,
       posts.excerpt,
+      posts.summary,
       posts.cover_image_url,
       posts.status,
       posts.created_at,
@@ -69,6 +71,7 @@ export async function listAllPosts() {
       posts.title,
       posts.slug,
       posts.excerpt,
+      posts.summary,
       posts.cover_image_url,
       posts.status,
       posts.created_at,
@@ -90,6 +93,7 @@ export async function getPostBySlug(slug: string) {
       posts.title,
       posts.slug,
       posts.excerpt,
+      posts.summary,
       posts.cover_image_url,
       posts.content,
       posts.status,
@@ -114,6 +118,7 @@ export async function getPublishedPostBySlug(slug: string) {
       posts.title,
       posts.slug,
       posts.excerpt,
+      posts.summary,
       posts.cover_image_url,
       posts.content,
       posts.status,

@@ -34,7 +34,6 @@ export default async function PostsPage() {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-10">
           <h1 className="text-4xl font-bold text-gray-900">Articles</h1>
-          <p className="text-gray-600 mt-2">Security key insights and product updates.</p>
         </div>
 
         <div className="grid gap-6">
@@ -42,18 +41,50 @@ export default async function PostsPage() {
             <Link
               key={post.id}
               href={`/posts/${post.slug}`}
-              className="block rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition hover:shadow-md"
+              className="block overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
             >
-              <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
-                <span>
-                  {post.published_at
-                    ? new Date(post.published_at).toLocaleDateString()
-                    : new Date(post.created_at).toLocaleDateString()}
-                </span>
-                {post.author_name && <span>• By {post.author_name}</span>}
+              {post.cover_image_url && (
+                <div className="relative aspect-[5/2] h-[272px] w-full overflow-hidden bg-gray-100">
+                  <img
+                    src={post.cover_image_url}
+                    alt={`${post.title} cover image`}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
+                  <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-white/80 sm:text-sm">
+                      <span>
+                        {post.published_at
+                          ? new Date(post.published_at).toLocaleDateString()
+                          : new Date(post.created_at).toLocaleDateString()}
+                      </span>
+                      {post.author_name && <span>• By {post.author_name}</span>}
+                    </div>
+                    <h2 className="mt-1 text-xl font-semibold text-white drop-shadow sm:text-2xl">
+                      {post.title}
+                    </h2>
+                  </div>
+                </div>
+              )}
+              <div className="p-6">
+                {!post.cover_image_url && (
+                  <>
+                    <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+                      <span>
+                        {post.published_at
+                          ? new Date(post.published_at).toLocaleDateString()
+                          : new Date(post.created_at).toLocaleDateString()}
+                      </span>
+                      {post.author_name && <span>• By {post.author_name}</span>}
+                    </div>
+                    <h2 className="mt-2 text-2xl font-semibold text-gray-900">{post.title}</h2>
+                  </>
+                )}
+                {(post.summary || post.excerpt) && (
+                  <p className="mt-3 text-gray-600">{post.summary || post.excerpt}</p>
+                )}
               </div>
-              <h2 className="mt-2 text-2xl font-semibold text-gray-900">{post.title}</h2>
-              {post.excerpt && <p className="mt-3 text-gray-600">{post.excerpt}</p>}
             </Link>
           ))}
           {posts.length === 0 && (

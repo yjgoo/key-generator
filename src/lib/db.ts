@@ -49,6 +49,7 @@ export async function ensureSchema() {
       title text NOT NULL,
       slug text UNIQUE NOT NULL,
       excerpt text,
+      summary text,
       cover_image_url text,
       content text NOT NULL,
       status text NOT NULL DEFAULT 'draft',
@@ -60,6 +61,7 @@ export async function ensureSchema() {
   `;
 
   await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS cover_image_url text;`;
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS summary text;`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS comments (
