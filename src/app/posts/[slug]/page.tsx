@@ -8,6 +8,8 @@ import { Footer } from '@/components/Footer';
 import { addCommentAction } from './actions';
 import { getPublishedPostBySlug, listComments, listRelatedTools } from '@/lib/posts';
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
