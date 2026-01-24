@@ -83,7 +83,7 @@ export function PostForm() {
           className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           placeholder="Write your post content here"
         />
-        <p className="mt-1 text-xs text-gray-500">Content is displayed as plain text with line breaks.</p>
+        <p className="mt-1 text-xs text-gray-500">Supports Markdown (headings, lists, links, code, tables).</p>
       </div>
 
       <div>

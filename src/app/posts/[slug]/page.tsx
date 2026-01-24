@@ -1,5 +1,8 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeSanitize from 'rehype-sanitize';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { addCommentAction } from './actions';
@@ -45,11 +48,134 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 function renderContent(content: string) {
-  return content.split('\n').map((line, index) => (
-    <p key={index} className="text-gray-700 leading-7 mb-4">
-      {line || '\u00A0'}
-    </p>
-  ));
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeSanitize]}
+      components={{
+        h1: ({ children, ...props }) => (
+          <h1 className="mt-8 mb-4 text-3xl font-bold text-gray-900" {...props}>
+            {children}
+          </h1>
+        ),
+        h2: ({ children, ...props }) => (
+          <h2 className="mt-8 mb-4 text-2xl font-semibold text-gray-900" {...props}>
+            {children}
+          </h2>
+        ),
+        h3: ({ children, ...props }) => (
+          <h3 className="mt-6 mb-3 text-xl font-semibold text-gray-900" {...props}>
+            {children}
+          </h3>
+        ),
+        h4: ({ children, ...props }) => (
+          <h4 className="mt-6 mb-2 text-lg font-semibold text-gray-900" {...props}>
+            {children}
+          </h4>
+        ),
+        p: ({ children, ...props }) => (
+          <p className="mb-4 text-gray-700 leading-7" {...props}>
+            {children}
+          </p>
+        ),
+        a: ({ children, href, ...props }) => {
+          const isExternal = typeof href === 'string' && /^https?:\/\//i.test(href);
+          return (
+            <a
+              href={href}
+              className="text-blue-600 underline hover:text-blue-700"
+              target={isExternal ? '_blank' : undefined}
+              rel={isExternal ? 'noreferrer noopener' : undefined}
+              {...props}
+            >
+              {children}
+            </a>
+          );
+        },
+        ul: ({ children, ...props }) => (
+          <ul className="mb-4 list-disc pl-6 text-gray-700" {...props}>
+            {children}
+          </ul>
+        ),
+        ol: ({ children, ...props }) => (
+          <ol className="mb-4 list-decimal pl-6 text-gray-700" {...props}>
+            {children}
+          </ol>
+        ),
+        li: ({ children, ...props }) => (
+          <li className="mb-2" {...props}>
+            {children}
+          </li>
+        ),
+        blockquote: ({ children, ...props }) => (
+          <blockquote
+            className="my-6 border-l-4 border-blue-200 bg-blue-50 px-4 py-3 text-gray-700"
+            {...props}
+          >
+            {children}
+          </blockquote>
+        ),
+        code: ({ className, inline, children, ...props }) => {
+          const isBlock = !inline;
+          if (isBlock) {
+            return (
+              <code className="block overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100" {...props}>
+                {children}
+              </code>
+            );
+          }
+          return (
+            <code className="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-800" {...props}>
+              {children}
+            </code>
+          );
+        },
+        pre: ({ children, ...props }) => (
+          <pre className="my-4 overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100" {...props}>
+            {children}
+          </pre>
+        ),
+        hr: (props) => <hr className="my-8 border-gray-200" {...props} />,
+        img: ({ alt, ...props }) => (
+          <img
+            alt={alt || ''}
+            className="my-6 h-auto w-full rounded-lg border border-gray-200"
+            loading="lazy"
+            {...props}
+          />
+        ),
+        table: ({ children, ...props }) => (
+          <div className="my-6 overflow-x-auto">
+            <table className="min-w-full border border-gray-200 text-sm" {...props}>
+              {children}
+            </table>
+          </div>
+        ),
+        thead: ({ children, ...props }) => (
+          <thead className="bg-gray-50 text-left text-gray-700" {...props}>
+            {children}
+          </thead>
+        ),
+        tbody: ({ children, ...props }) => (
+          <tbody className="divide-y divide-gray-200" {...props}>
+            {children}
+          </tbody>
+        ),
+        th: ({ children, ...props }) => (
+          <th className="px-3 py-2 font-semibold" {...props}>
+            {children}
+          </th>
+        ),
+        td: ({ children, ...props }) => (
+          <td className="px-3 py-2 text-gray-700" {...props}>
+            {children}
+          </td>
+        ),
+      }}
+    >
+      {content}
+    </ReactMarkdown>
+  );
 }
 
 export default async function PostDetailPage({ params }: PageProps) {
