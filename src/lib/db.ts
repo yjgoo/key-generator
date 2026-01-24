@@ -63,10 +63,23 @@ export async function ensureSchema() {
     );
   `;
 
+  await sql`
+    CREATE TABLE IF NOT EXISTS post_related_tools (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      post_id uuid NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+      title text NOT NULL,
+      description text,
+      url text NOT NULL,
+      sort_order integer NOT NULL DEFAULT 0,
+      created_at timestamptz NOT NULL DEFAULT now()
+    );
+  `;
+
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_status_created_at ON posts(status, created_at DESC);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_comments_parent_id ON comments(parent_id);`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_post_related_tools_post_id ON post_related_tools(post_id);`;
 
   schemaReady = true;
 }

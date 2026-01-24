@@ -27,6 +27,16 @@ export interface CommentItem {
   created_at: string;
 }
 
+export interface RelatedToolItem {
+  id: string;
+  post_id: string;
+  title: string;
+  description: string | null;
+  url: string;
+  sort_order: number;
+  created_at: string;
+}
+
 export async function listPublishedPosts() {
   await ensureSchema();
   const result = await sql`
@@ -84,4 +94,16 @@ export async function listComments(postId: string) {
   `;
 
   return getRows(result) as CommentItem[];
+}
+
+export async function listRelatedTools(postId: string) {
+  await ensureSchema();
+  const result = await sql`
+    SELECT id, post_id, title, description, url, sort_order, created_at
+    FROM post_related_tools
+    WHERE post_id = ${postId}
+    ORDER BY sort_order ASC, created_at ASC;
+  `;
+
+  return getRows(result) as RelatedToolItem[];
 }

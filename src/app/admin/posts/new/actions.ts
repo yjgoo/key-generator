@@ -18,6 +18,7 @@ export async function createPostAction(_: CreatePostState, formData: FormData): 
   const content = String(formData.get('content') || '').trim();
   const excerpt = String(formData.get('excerpt') || '').trim();
   const status = String(formData.get('status') || 'draft') as 'draft' | 'published';
+  const relatedToolsRaw = String(formData.get('relatedTools') || '[]');
 
   if (!title || !content) {
     return { error: 'Title and content are required.' };
@@ -36,10 +37,40 @@ export async function createPostAction(_: CreatePostState, formData: FormData): 
 
   const publishedAt = status === 'published' ? new Date().toISOString() : null;
 
-  await sql`
+  const insertResult = await sql`
     INSERT INTO posts (title, slug, excerpt, content, status, published_at)
-    VALUES (${title}, ${baseSlug}, ${excerpt || null}, ${content}, ${status}, ${publishedAt});
+    VALUES (${title}, ${baseSlug}, ${excerpt || null}, ${content}, ${status}, ${publishedAt})
+    RETURNING id;
   `;
+
+  const postId = (getRows(insertResult) as { id: string }[])[0]?.id;
+
+  let relatedTools: Array<{ title: string; description?: string; url: string }> = [];
+  try {
+    const parsed = JSON.parse(relatedToolsRaw);
+    if (Array.isArray(parsed)) {
+      relatedTools = parsed
+        .map((tool) => ({
+          title: String(tool?.title || '').trim(),
+          description: String(tool?.description || '').trim(),
+          url: String(tool?.url || '').trim(),
+        }))
+        .filter((tool) => tool.title && tool.url);
+    }
+  } catch {
+    relatedTools = [];
+  }
+
+  if (postId && relatedTools.length > 0) {
+    await Promise.all(
+      relatedTools.map((tool, index) =>
+        sql`
+          INSERT INTO post_related_tools (post_id, title, description, url, sort_order)
+          VALUES (${postId}, ${tool.title}, ${tool.description || null}, ${tool.url}, ${index});
+        `,
+      ),
+    );
+  }
 
   revalidatePath('/posts');
   revalidatePath('/admin/posts');

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { addCommentAction } from './actions';
-import { getPublishedPostBySlug, listComments } from '@/lib/posts';
+import { getPublishedPostBySlug, listComments, listRelatedTools } from '@/lib/posts';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -56,7 +56,10 @@ export default async function PostDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const comments = await listComments(post.id);
+  const [comments, relatedTools] = await Promise.all([
+    listComments(post.id),
+    listRelatedTools(post.id),
+  ]);
   const grouped = new Map<string | null, typeof comments>();
 
   comments.forEach((comment) => {
@@ -141,6 +144,33 @@ export default async function PostDetailPage({ params }: PageProps) {
 
           <div className="mt-6">{renderContent(post.content)}</div>
         </article>
+
+        {relatedTools.length > 0 && (
+          <section className="mt-10" aria-labelledby="related-tools-title">
+            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+              <h2 id="related-tools-title" className="text-2xl font-semibold text-gray-900">
+                Related Tools
+              </h2>
+              <p className="mt-2 text-gray-600">
+                Helpful key generators mentioned in this article.
+              </p>
+              <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+                {relatedTools.map((tool) => (
+                  <li key={tool.id} className="rounded-lg border border-gray-200 p-4">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      <a href={tool.url} className="hover:text-blue-600">
+                        {tool.title}
+                      </a>
+                    </h3>
+                    {tool.description && (
+                      <p className="mt-2 text-sm text-gray-600">{tool.description}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
 
         <section className="mt-10">
           <h2 className="text-2xl font-semibold text-gray-900">Comments & Replies</h2>
