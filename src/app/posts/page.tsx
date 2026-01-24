@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -107,11 +108,12 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
             >
               {post.cover_image_url && (
                 <div className="relative aspect-[5/2] h-[272px] w-full overflow-hidden bg-gray-100">
-                  <img
+                  <Image
                     src={post.cover_image_url}
                     alt={`${post.title} cover image`}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 768px"
+                    className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
                   <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">

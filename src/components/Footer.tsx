@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export function Footer() {
@@ -8,10 +9,12 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <img 
-                src="/logo.png" 
-                alt="Key Generator Logo" 
-                className="w-8 h-8 rounded-lg"
+              <Image
+                src="/logo.png"
+                alt="Key Generator Logo"
+                width={32}
+                height={32}
+                className="rounded-lg"
               />
               <span className="text-xl font-bold">Key Generator</span>
             </div>

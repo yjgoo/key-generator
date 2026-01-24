@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -117,8 +118,8 @@ function renderContent(content: string) {
             {children}
           </blockquote>
         ),
-        code: ({ className, inline, children, ...props }) => {
-          const isBlock = !inline;
+        code: ({ className, children, ...props }) => {
+          const isBlock = typeof className === 'string' && className.length > 0;
           if (isBlock) {
             return (
               <code className="block overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100" {...props}>
@@ -138,14 +139,22 @@ function renderContent(content: string) {
           </pre>
         ),
         hr: (props) => <hr className="my-8 border-gray-200" {...props} />,
-        img: ({ alt, ...props }) => (
-          <img
-            alt={alt || ''}
-            className="my-6 h-auto w-full rounded-lg border border-gray-200"
-            loading="lazy"
-            {...props}
-          />
-        ),
+        img: ({ alt, src }) => {
+          if (!src || typeof src !== 'string') {
+            return null;
+          }
+          return (
+            <Image
+              src={src}
+              alt={alt || ''}
+              width={1200}
+              height={630}
+              sizes="(max-width: 768px) 100vw, 768px"
+              className="my-6 h-auto w-full rounded-lg border border-gray-200"
+              unoptimized
+            />
+          );
+        },
         table: ({ children, ...props }) => (
           <div className="my-6 overflow-x-auto">
             <table className="min-w-full border border-gray-200 text-sm" {...props}>
@@ -283,11 +292,13 @@ export default async function PostDetailPage({ params }: PageProps) {
           {post.excerpt && <p className="mt-3 text-gray-600">{post.excerpt}</p>}
           {post.cover_image_url && (
             <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
-              <img
+              <Image
                 src={post.cover_image_url}
                 alt={`${post.title} cover image`}
+                width={1200}
+                height={630}
+                sizes="(max-width: 768px) 100vw, 768px"
                 className="h-auto w-full object-cover"
-                loading="lazy"
               />
             </div>
           )}

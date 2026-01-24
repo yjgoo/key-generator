@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import * as bcrypt from 'bcryptjs';
 import { Header } from '@/components/Header';
@@ -18,7 +18,7 @@ export function BcryptGenerator({ generator }: BcryptGeneratorProps) {
   const [copied, setCopied] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateHash = async () => {
+    const generateHash = useCallback(async () => {
     if (!password) {
         setHash('');
         return;
@@ -33,7 +33,7 @@ export function BcryptGenerator({ generator }: BcryptGeneratorProps) {
         setIsGenerating(false);
         setCopied(false);
     }
-  };
+    }, [password, rounds]);
 
   // Generate on mount with a random password
   useEffect(() => {
@@ -42,11 +42,11 @@ export function BcryptGenerator({ generator }: BcryptGeneratorProps) {
   }, []);
   
   // Generate hash when password is set initially
-  useEffect(() => {
-      if (password && !hash) {
-          generateHash();
+    useEffect(() => {
+      if (password) {
+        generateHash();
       }
-  }, [password]);
+    }, [password, generateHash]);
 
 
   const copyToClipboard = async () => {

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { keyGenerators } from '@/lib/keyGenerators';
@@ -108,10 +109,12 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Key Generator Logo"
-                className="w-8 h-8 rounded-lg"
+                width={32}
+                height={32}
+                className="rounded-lg"
               />
               <span className="text-xl font-bold text-gray-900">Key Generator</span>
             </Link>
