@@ -267,6 +267,11 @@ export default async function PostDetailPage({ params }: PageProps) {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <article className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
           <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+            {post.category_name && (
+              <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700">
+                {post.category_name}
+              </span>
+            )}
             <span>
               {post.published_at
                 ? new Date(post.published_at).toLocaleDateString()

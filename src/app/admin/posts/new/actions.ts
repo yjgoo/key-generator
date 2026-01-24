@@ -18,6 +18,7 @@ export async function createPostAction(_: CreatePostState, formData: FormData): 
   const content = String(formData.get('content') || '').trim();
   const excerpt = String(formData.get('excerpt') || '').trim();
   const summary = String(formData.get('summary') || '').trim();
+  const categoryName = String(formData.get('category') || '').trim();
   const coverImageUrl = String(formData.get('coverImageUrl') || '').trim();
   const status = String(formData.get('status') || 'draft') as 'draft' | 'published';
   const relatedToolsRaw = String(formData.get('relatedTools') || '[]');
@@ -39,13 +40,28 @@ export async function createPostAction(_: CreatePostState, formData: FormData): 
 
   const publishedAt = status === 'published' ? new Date().toISOString() : null;
 
+  let categoryId: string | null = null;
+  if (categoryName) {
+    const categorySlug = slugifyText(categoryName);
+    if (categorySlug) {
+      const categoryResult = await sql`
+        INSERT INTO categories (name, slug)
+        VALUES (${categoryName}, ${categorySlug})
+        ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name
+        RETURNING id;
+      `;
+      categoryId = (getRows(categoryResult) as { id: string }[])[0]?.id ?? null;
+    }
+  }
+
   const insertResult = await sql`
-    INSERT INTO posts (title, slug, excerpt, summary, cover_image_url, content, status, published_at, author_id)
+    INSERT INTO posts (title, slug, excerpt, summary, category_id, cover_image_url, content, status, published_at, author_id)
     VALUES (
       ${title},
       ${baseSlug},
       ${excerpt || null},
       ${summary || null},
+      ${categoryId},
       ${coverImageUrl || null},
       ${content},
       ${status},

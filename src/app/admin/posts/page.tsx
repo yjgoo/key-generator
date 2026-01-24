@@ -54,6 +54,7 @@ export default async function AdminPostsPage() {
             <thead className="bg-gray-50 text-gray-600">
               <tr>
                 <th className="px-6 py-3 text-left font-semibold">Title</th>
+                <th className="px-6 py-3 text-left font-semibold">Category</th>
                 <th className="px-6 py-3 text-left font-semibold">Status</th>
                 <th className="px-6 py-3 text-left font-semibold">Published</th>
                 <th className="px-6 py-3 text-right font-semibold">Actions</th>
@@ -67,6 +68,9 @@ export default async function AdminPostsPage() {
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">{post.title}</div>
                       <div className="text-xs text-gray-500">/{post.slug}</div>
+                    </td>
+                    <td className="px-6 py-4 text-gray-600">
+                      {post.category_name || '—'}
                     </td>
                     <td className="px-6 py-4">
                       <span
@@ -120,7 +124,7 @@ export default async function AdminPostsPage() {
               })}
               {posts.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-gray-500">
+                  <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
                     No posts yet. Click “New post” to get started.
                   </td>
                 </tr>

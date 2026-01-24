@@ -8,6 +8,9 @@ export interface PostSummary {
   slug: string;
   excerpt: string | null;
   summary: string | null;
+  category_id: string | null;
+  category_name: string | null;
+  category_slug: string | null;
   cover_image_url: string | null;
   status: PostStatus;
   created_at: string;
@@ -49,6 +52,9 @@ export async function listPublishedPosts() {
       posts.slug,
       posts.excerpt,
       posts.summary,
+        posts.category_id,
+        categories.name as category_name,
+        categories.slug as category_slug,
       posts.cover_image_url,
       posts.status,
       posts.created_at,
@@ -56,6 +62,7 @@ export async function listPublishedPosts() {
       COALESCE(users.name, users.email) AS author_name
     FROM posts
     LEFT JOIN users ON posts.author_id = users.id
+    LEFT JOIN categories ON posts.category_id = categories.id
     WHERE status = 'published'
     ORDER BY published_at DESC NULLS LAST, created_at DESC;
   `;
@@ -72,6 +79,9 @@ export async function listAllPosts() {
       posts.slug,
       posts.excerpt,
       posts.summary,
+        posts.category_id,
+        categories.name as category_name,
+        categories.slug as category_slug,
       posts.cover_image_url,
       posts.status,
       posts.created_at,
@@ -79,6 +89,7 @@ export async function listAllPosts() {
       COALESCE(users.name, users.email) AS author_name
     FROM posts
     LEFT JOIN users ON posts.author_id = users.id
+    LEFT JOIN categories ON posts.category_id = categories.id
     ORDER BY created_at DESC;
   `;
 
@@ -94,6 +105,9 @@ export async function getPostBySlug(slug: string) {
       posts.slug,
       posts.excerpt,
       posts.summary,
+      posts.category_id,
+      categories.name as category_name,
+      categories.slug as category_slug,
       posts.cover_image_url,
       posts.content,
       posts.status,
@@ -103,6 +117,7 @@ export async function getPostBySlug(slug: string) {
       COALESCE(users.name, users.email) AS author_name
     FROM posts
     LEFT JOIN users ON posts.author_id = users.id
+    LEFT JOIN categories ON posts.category_id = categories.id
     WHERE slug = ${slug}
     LIMIT 1;
   `;
@@ -119,6 +134,9 @@ export async function getPublishedPostBySlug(slug: string) {
       posts.slug,
       posts.excerpt,
       posts.summary,
+      posts.category_id,
+      categories.name as category_name,
+      categories.slug as category_slug,
       posts.cover_image_url,
       posts.content,
       posts.status,
@@ -128,6 +146,7 @@ export async function getPublishedPostBySlug(slug: string) {
       COALESCE(users.name, users.email) AS author_name
     FROM posts
     LEFT JOIN users ON posts.author_id = users.id
+    LEFT JOIN categories ON posts.category_id = categories.id
     WHERE slug = ${slug} AND status = 'published'
     LIMIT 1;
   `;

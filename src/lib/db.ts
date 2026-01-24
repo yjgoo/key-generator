@@ -44,12 +44,22 @@ export async function ensureSchema() {
   await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url text;`;
 
   await sql`
+    CREATE TABLE IF NOT EXISTS categories (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      name text UNIQUE NOT NULL,
+      slug text UNIQUE NOT NULL,
+      created_at timestamptz NOT NULL DEFAULT now()
+    );
+  `;
+
+  await sql`
     CREATE TABLE IF NOT EXISTS posts (
       id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
       title text NOT NULL,
       slug text UNIQUE NOT NULL,
       excerpt text,
       summary text,
+      category_id uuid REFERENCES categories(id) ON DELETE SET NULL,
       cover_image_url text,
       content text NOT NULL,
       status text NOT NULL DEFAULT 'draft',
@@ -62,6 +72,7 @@ export async function ensureSchema() {
 
   await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS cover_image_url text;`;
   await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS summary text;`;
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS category_id uuid;`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS comments (
@@ -89,6 +100,8 @@ export async function ensureSchema() {
 
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_status_created_at ON posts(status, created_at DESC);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_posts_category_id ON posts(category_id);`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_comments_parent_id ON comments(parent_id);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_post_related_tools_post_id ON post_related_tools(post_id);`;

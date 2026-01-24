@@ -54,6 +54,11 @@ export default async function PostsPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
                   <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
                     <div className="flex flex-wrap items-center gap-2 text-xs text-white/80 sm:text-sm">
+                      {post.category_name && (
+                        <span className="inline-flex items-center rounded-full bg-white/20 px-2 py-0.5 text-xs font-semibold text-white">
+                          {post.category_name}
+                        </span>
+                      )}
                       <span>
                         {post.published_at
                           ? new Date(post.published_at).toLocaleDateString()
@@ -71,6 +76,11 @@ export default async function PostsPage() {
                 {!post.cover_image_url && (
                   <>
                     <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+                      {post.category_name && (
+                        <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700">
+                          {post.category_name}
+                        </span>
+                      )}
                       <span>
                         {post.published_at
                           ? new Date(post.published_at).toLocaleDateString()
