@@ -58,6 +58,42 @@ export function ShareSection({ title, url }: ShareSectionProps) {
             X
           </a>
           <a
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-700 hover:border-blue-200 hover:text-blue-600"
+            aria-label="Share on LinkedIn"
+          >
+            LinkedIn
+          </a>
+          <a
+            href={`https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-700 hover:border-orange-200 hover:text-orange-600"
+            aria-label="Share on Reddit"
+          >
+            Reddit
+          </a>
+          <a
+            href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-700 hover:border-sky-200 hover:text-sky-600"
+            aria-label="Share on Telegram"
+          >
+            Telegram
+          </a>
+          <a
+            href={`https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-700 hover:border-emerald-200 hover:text-emerald-600"
+            aria-label="Share on WhatsApp"
+          >
+            WhatsApp
+          </a>
+          <a
             href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`}
             target="_blank"
             rel="noreferrer noopener"
