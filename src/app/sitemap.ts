@@ -3,6 +3,8 @@ import { keyGenerators } from '@/lib/keyGenerators'
 import { listPublishedPosts } from '@/lib/posts'
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://key-generator.com'
