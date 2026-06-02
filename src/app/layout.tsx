@@ -58,7 +58,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
         <Script
-          src="https://pl29616630.effectivecpmnetwork.com/d6/c3/01/d6c3013585f029b603d78638002c5aa6.js"
+          src="https://pl29616863.effectivecpmnetwork.com/4f/24/07/4f240742e2939686623fe2466fe852cd.js"
           strategy="afterInteractive"
         />
       </head>
