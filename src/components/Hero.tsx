@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { AdSlot } from '@/components/AdSlot';
 import { getPrimaryGenerator, generateKey, keyGenerators, getGeneratorPath } from '@/lib/keyGenerators';
 
 export function Hero() {
@@ -134,6 +135,8 @@ export function Hero() {
             ))}
           </div>
         </div>
+
+        <AdSlot placement="leaderboard" className="mb-0 mt-3" />
       </div>
     </section>
   );

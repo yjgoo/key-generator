@@ -2,13 +2,18 @@
 
 import { useEffect, useRef } from 'react';
 
-type AdPlacement = 'inline-banner' | 'content-rectangle';
+type AdPlacement = 'inline-banner' | 'leaderboard' | 'content-rectangle';
 
 const ADS = {
   'inline-banner': {
     key: 'bb9f14d28ee91bb533468621fcdff0d5',
     width: 320,
     height: 50,
+  },
+  leaderboard: {
+    key: 'd864172e8380d745ec870730882a508b',
+    width: 728,
+    height: 90,
   },
   'content-rectangle': {
     key: '84c222d080ecc5b3e21d6b8d44156eb5',
