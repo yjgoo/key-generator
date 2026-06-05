@@ -14,7 +14,7 @@ export default function Home() {
         <Hero />
         <KeyGenerators />
         <Introduction />
-        <AdSlot placement="inline-banner" className="px-4 pb-12" />
+        <AdSlot placement="inline-banner" />
         <FAQ />
       </main>
       <Footer />

@@ -222,7 +222,7 @@ export function GeneratorPage({ generator, seoDescription, pageUrl }: GeneratorP
           </div>
         </div>
 
-        <AdSlot placement="content-rectangle" className="mb-12" />
+        <AdSlot placement="content-rectangle" />
       </main>
 
       <Footer />

@@ -159,7 +159,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
           )}
         </div>
 
-        <AdSlot placement="inline-banner" className="mb-8" />
+        <AdSlot placement="inline-banner" />
 
         <div className="grid gap-6">
           {posts.map((post) => (

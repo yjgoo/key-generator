@@ -53,7 +53,7 @@ export function CryptoPageShell({
           {children}
         </div>
 
-        <AdSlot placement="content-rectangle" className="mt-10" />
+        <AdSlot placement="content-rectangle" />
       </main>
 
       <Footer />

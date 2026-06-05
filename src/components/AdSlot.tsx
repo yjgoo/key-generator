@@ -26,7 +26,7 @@ export function AdSlot({ placement, className = '' }: AdSlotProps) {
 
   return (
     <aside
-      className={`mx-auto flex w-full justify-center overflow-hidden ${className}`}
+      className={`ad-slot--floating-left ${className}`}
       aria-label="Advertisement"
     >
       <div
