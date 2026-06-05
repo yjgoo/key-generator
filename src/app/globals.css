@@ -68,25 +68,6 @@ textarea:focus-visible {
   overflow: hidden;
 }
 
-/* Left-side floating ads stay out of the reading flow and hide on narrower screens. */
-.ad-slot--floating-left {
-  display: none;
-}
-
-@media (min-width: 1880px) {
-  .ad-slot--floating-left {
-    position: fixed;
-    z-index: 30;
-    top: 50%;
-    left: max(16px, calc((100vw - 72rem) / 2 - 340px));
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    transform: translateY(-50%);
-  }
-}
-
 /* Custom slider styles */
 .slider {
   -webkit-appearance: none;

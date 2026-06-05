@@ -188,6 +188,8 @@ export function GeneratorPage({ generator, seoDescription, pageUrl }: GeneratorP
           </div>
         </div>
 
+        <AdSlot placement="content-rectangle" />
+
         {/* SEO Content */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-12">
           <div className="prose prose-gray max-w-none">
@@ -221,8 +223,6 @@ export function GeneratorPage({ generator, seoDescription, pageUrl }: GeneratorP
             </ul>
           </div>
         </div>
-
-        <AdSlot placement="content-rectangle" />
       </main>
 
       <Footer />

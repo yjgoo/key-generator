@@ -57,15 +57,16 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-        <Script
-          src="https://pl29616863.effectivecpmnetwork.com/4f/24/07/4f240742e2939686623fe2466fe852cd.js"
-          strategy="afterInteractive"
-        />
       </head>
       <body className="antialiased">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         {children}
         <BackToTop />
+        <Script
+          id="notification-ad"
+          src="https://pl29616863.effectivecpmnetwork.com/4f/24/07/4f240742e2939686623fe2466fe852cd.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

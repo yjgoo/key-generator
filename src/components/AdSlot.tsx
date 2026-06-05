@@ -1,4 +1,6 @@
-import Script from 'next/script';
+'use client';
+
+import { useEffect, useRef } from 'react';
 
 type AdPlacement = 'inline-banner' | 'content-rectangle';
 
@@ -22,34 +24,50 @@ interface AdSlotProps {
 
 export function AdSlot({ placement, className = '' }: AdSlotProps) {
   const ad = ADS[placement];
-  const scriptId = `ad-options-${placement}`;
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    container.innerHTML = '';
+
+    const optionsScript = document.createElement('script');
+    optionsScript.text = `
+      atOptions = {
+        key: '${ad.key}',
+        format: 'iframe',
+        height: ${ad.height},
+        width: ${ad.width},
+        params: {}
+      };
+    `;
+
+    const invokeScript = document.createElement('script');
+    invokeScript.src = `https://www.highperformanceformat.com/${ad.key}/invoke.js`;
+    invokeScript.async = true;
+
+    container.appendChild(optionsScript);
+    container.appendChild(invokeScript);
+
+    return () => {
+      container.innerHTML = '';
+    };
+  }, [ad.height, ad.key, ad.width]);
 
   return (
     <aside
-      className={`ad-slot--floating-left ${className}`}
+      className={`mx-auto my-10 flex w-full justify-center overflow-hidden ${className}`}
       aria-label="Advertisement"
     >
       <div
-        className="flex items-center justify-center"
+        ref={containerRef}
+        className="flex max-w-full items-center justify-center"
         style={{ width: ad.width, minHeight: ad.height }}
-      >
-        <Script id={scriptId} strategy="afterInteractive">
-          {`
-            window.atOptions = {
-              key: '${ad.key}',
-              format: 'iframe',
-              height: ${ad.height},
-              width: ${ad.width},
-              params: {}
-            };
-          `}
-        </Script>
-        <Script
-          id={`ad-invoke-${placement}`}
-          src={`https://www.highperformanceformat.com/${ad.key}/invoke.js`}
-          strategy="afterInteractive"
-        />
-      </div>
+      />
     </aside>
   );
 }

@@ -159,10 +159,8 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
           )}
         </div>
 
-        <AdSlot placement="inline-banner" />
-
         <div className="grid gap-6">
-          {posts.map((post) => (
+          {posts.flatMap((post, index) => [
             <Link
               key={post.id}
               href={`/posts/${post.slug}`}
@@ -235,8 +233,11 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                   </div>
                 )}
               </div>
-            </Link>
-          ))}
+            </Link>,
+            index === 1 ? (
+              <AdSlot key="posts-inline-ad" placement="inline-banner" className="my-2" />
+            ) : null,
+          ])}
           {posts.length === 0 && (
             <div className="rounded-xl border border-dashed border-gray-300 bg-white p-8 text-center text-gray-500">
               No articles found for this filter.
