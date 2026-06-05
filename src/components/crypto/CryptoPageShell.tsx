@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { AdSlot } from '@/components/AdSlot';
 
 interface CryptoPageShellProps {
   title: string;
@@ -51,6 +52,8 @@ export function CryptoPageShell({
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-8">
           {children}
         </div>
+
+        <AdSlot placement="content-rectangle" className="mt-10" />
       </main>
 
       <Footer />

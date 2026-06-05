@@ -8,6 +8,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ShareSection } from '@/components/ShareSection';
+import { AdSlot } from '@/components/AdSlot';
 import { addCommentAction } from './actions';
 import { getPublishedPostBySlug, listComments, listRelatedPostsByTags, listRelatedTools } from '@/lib/posts';
 
@@ -406,6 +407,7 @@ export default async function PostDetailPage({ params }: PageProps) {
 
           <aside className="space-y-6 lg:sticky lg:top-24 h-fit">
             <ShareSection title={post.title} url={shareUrl} />
+            <AdSlot placement="content-rectangle" />
             {relatedTools.length > 0 && (
               <section aria-labelledby="related-tools-title">
                 <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">

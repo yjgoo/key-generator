@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { AdSlot } from '@/components/AdSlot';
 import { listPublishedCategories, listPublishedPosts, listPublishedTags } from '@/lib/posts';
 
 export const metadata: Metadata = {
@@ -157,6 +158,8 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
             </div>
           )}
         </div>
+
+        <AdSlot placement="inline-banner" className="mb-8" />
 
         <div className="grid gap-6">
           {posts.map((post) => (

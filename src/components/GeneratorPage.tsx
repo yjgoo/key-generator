@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { StructuredData } from '@/components/StructuredData';
+import { AdSlot } from '@/components/AdSlot';
 import { KeyGenerator, generateKey as generateKeyUtil } from '@/lib/keyGenerators';
 
 interface GeneratorPageProps {
@@ -220,6 +221,8 @@ export function GeneratorPage({ generator, seoDescription, pageUrl }: GeneratorP
             </ul>
           </div>
         </div>
+
+        <AdSlot placement="content-rectangle" className="mb-12" />
       </main>
 
       <Footer />

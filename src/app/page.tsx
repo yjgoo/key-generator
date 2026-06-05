@@ -4,6 +4,7 @@ import { Hero } from '@/components/Hero';
 import { Introduction } from '@/components/Introduction';
 import { FAQ } from '@/components/FAQ';
 import { Footer } from '@/components/Footer';
+import { AdSlot } from '@/components/AdSlot';
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <Hero />
         <KeyGenerators />
         <Introduction />
+        <AdSlot placement="inline-banner" className="px-4 pb-12" />
         <FAQ />
       </main>
       <Footer />
