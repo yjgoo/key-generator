@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { BackToTop } from "@/components/BackToTop";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { NotificationAd } from "@/components/NotificationAd";
 
 export const metadata: Metadata = {
   title: "Key Generator - Generate Secure Keys & Secrets Online",
@@ -57,14 +58,10 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-        <Script
-          id="notification-ad"
-          src="https://pl29616863.effectivecpmnetwork.com/4f/24/07/4f240742e2939686623fe2466fe852cd.js"
-          strategy="beforeInteractive"
-        />
       </head>
       <body className="antialiased">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        <NotificationAd />
         {children}
         <BackToTop />
       </body>
